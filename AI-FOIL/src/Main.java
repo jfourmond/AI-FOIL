@@ -2,8 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import weka.attributeSelection.GainRatioAttributeEval;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -37,6 +39,33 @@ public class Main {
 				neg.add(instance);
 		}
 		return neg;
+	}
+	
+	/**
+	 * Retourne le {@link Literal} ayant le gain le plus élevé
+	 * @param Pos : {@link Instances}
+	 * @param Neg : {@link Instances}
+	 * @return {@link Literal}
+	 */
+	public static Literal getBestLiteral(Instances Pos, Instances Neg) {
+		assert(Pos.equalHeaders(Neg));
+		
+		ArrayList<Literal> literals = new ArrayList<>();
+		
+		for(int i=0 ; i<Pos.numAttributes()-1 ; i++) {
+			Attribute attribute = Pos.attribute(i);
+			for(int j=0 ; j<attribute.numValues() ; j++) {
+				String label = attribute.value(j);
+				literals.add(new Literal(attribute, label));
+			}
+		}
+		
+		Literal bestLiteral = literals.get(0);
+		for(Literal L : literals) {
+			if(L.gain(Pos, Neg) > bestLiteral.gain(Pos, Neg)) bestLiteral = L;
+		}
+		
+		return bestLiteral;
 	}
 	
 	public static void main(String[] args) {
@@ -107,6 +136,8 @@ public class Main {
 			
 			Literal L = new Literal(data.attribute(0), data.attribute(0).value(0));
 			L.gain(Pos, Neg);
+			
+			System.out.println(getBestLiteral(Pos, Neg));
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
