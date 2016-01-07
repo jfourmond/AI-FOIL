@@ -1,4 +1,5 @@
 import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class Literal {
@@ -11,6 +12,27 @@ public class Literal {
 	}
 	
 	public double gain(Instances pos, Instances neg) {
-		return 0.0;
+		double P = pos.numInstances();
+		double N = neg.numInstances();
+		double p = 0;
+		double n = 0;
+		
+		// p le nombre d'exemples dans Pos qui satisfont L
+		for(int i=0 ; i<pos.numInstances() ; i++) {
+			Instance instance = pos.instance(i);
+			if(instance.stringValue(attribut).equals(label)) p++;
+		}
+		
+		// n le nombre d'exemples dans Neg qui satisfont L
+		for(int i=0 ; i<neg.numInstances() ; i++) {
+			Instance instance = neg.instance(i);
+			if(instance.stringValue(attribut).equals(label)) n++;
+		}
+		
+		return (p * (log2(p / (p+n)) - log2(P / (P + N))));
+	}
+	
+	public static double log2(double x) {
+		return Math.log(x) / Math.log(2);
 	}
 }

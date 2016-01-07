@@ -105,6 +105,9 @@ public class Main {
 				System.out.println("\t" + instance.classValue());
 			}
 			
+			Literal L = new Literal(data.attribute(0), data.attribute(0).value(0));
+			L.gain(Pos, Neg);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
