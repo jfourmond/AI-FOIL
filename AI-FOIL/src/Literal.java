@@ -44,6 +44,7 @@ public class Literal {
 			Instance instance = neg.instance(i);
 			if(instance.stringValue(attribute).equals(label)) n++;
 		}
+		System.out.println(label + " : " + (p * (log2(p / (p+n)) - log2(P / (P + N)))));
 		return (p * (log2(p / (p+n)) - log2(P / (P + N))));
 	}
 	

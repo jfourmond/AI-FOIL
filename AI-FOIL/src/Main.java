@@ -58,9 +58,11 @@ public class Main {
 				literals.add(new Literal(attribute, label));
 			}
 		}
+		
 		Literal bestLiteral = literals.get(0);
 		for(Literal L : literals) {
 			if(L.gain(Pos, Neg) > bestLiteral.gain(Pos, Neg)) bestLiteral = L;
+			System.out.println("Best : " + bestLiteral);
 		}
 		return bestLiteral;
 	}
@@ -109,7 +111,6 @@ public class Main {
 			}
 			if(!compare(literals, instanceLiteral)) data.add(instance);
 		}
-		System.out.println(data);
 		return data;
 	}
 	
@@ -122,9 +123,11 @@ public class Main {
 	public static boolean compare(ArrayList<Literal> L1, ArrayList<Literal> L2) {
 		for(Literal l : L1) {
 			if(!L2.contains(l)) {
+				System.out.print(L1 + " différent de " + L2);
 				return false;
 			}
 		}
+		System.out.print(L1 + " semblable de " + L2);
 		return true;
 	}
 	
@@ -148,12 +151,10 @@ public class Main {
 				NegNewRegle = getSatisfyInstances(NegNewRegle, meilleur);
 				PosNewRegle = getSatisfyInstances(PosNewRegle, meilleur);
 				
-				System.out.println(meilleur + " " + meilleur.gain(PosNewRegle, NegNewRegle));
-				// TODO Boucle ici
+				// TODO Boucle ici : Etudier Erreur
 				for(int i=0 ; i<NegNewRegle.numInstances() ; i++) {
 					Instance instance = NegNewRegle.instance(i);
-					System.out.print("Instance " + i + " : " + instance);
-					System.out.println("\t" + instance.classValue());
+					System.out.println("Instance " + i + " : " + instance);
 				}
 			}
 			rules.add(NewRegle);
@@ -192,18 +193,6 @@ public class Main {
 				Instance instance = Neg.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
 				System.out.println("\t" + instance.classValue());
-			}
-			
-			Literal L = getBestLiteral(Pos, Neg);
-			
-			System.out.println("\nBest Literal : " + L + "\n");
-			
-			Instances satisfy = getSatisfyInstances(data, L);
-			// Parcours des instances satisfiant L
-			System.out.println("-----\tINSTANCES SATISFAISANTES\t-----");
-			for(int i=0 ; i<satisfy.numInstances() ; i++) {
-				Instance instance = satisfy.instance(i);
-				System.out.print("Instance " + i + " : " + instance);
 			}
 			
 			ArrayList<Rule> gen_rules = couvertureSequentielle(data);
