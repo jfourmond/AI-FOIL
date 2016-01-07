@@ -4,10 +4,41 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import weka.attributeSelection.GainRatioAttributeEval;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class Main {
 
+	/**
+	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
+	 * @param instances : {@link Instances}
+	 * @return {@link Instances}
+	 */
+	public static Instances getPositiveInstances(Instances instances) {
+		Instances pos = new Instances(instances, 0);
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			if(instance.classValue() == 0.0)
+				pos.add(instance);
+		}
+		return pos;
+	}
+	
+	/**
+	 * Retourne les {@link Instances} négatives des {@link Instances} passées en paramètre
+	 * @param instances : {@link Instances}
+	 * @return {@link Instances}
+	 */
+	public static Instances getNegativeInstances(Instances instances) {
+		Instances neg = new Instances(instances, 0);
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			if(instance.classValue() == 1.0)
+				neg.add(instance);
+		}
+		return neg;
+	}
+	
 	public static void main(String[] args) {
 		 BufferedReader reader;
 		try {
@@ -44,7 +75,9 @@ public class Main {
 			
 			// Parcours des Instances
 			for(int i=0 ; i<data.numInstances() ; i++) {
-				System.out.println("Instance " + i + " : " + data.instance(i));
+				Instance instance = data.instance(i);
+				System.out.print("Instance " + i + " : " + instance);
+				System.out.println("\t" + instance.classValue());
 			}
 			
 			// Parcours des valeurs des attributs de l'instance 0
@@ -55,6 +88,22 @@ public class Main {
 			GainRatioAttributeEval G = new GainRatioAttributeEval();
 			G.buildEvaluator(data);
 			System.out.println(G.evaluateAttribute(0));
+			
+			Instances Pos = getPositiveInstances(data);
+			// Parcours des Instances
+			for(int i=0 ; i<Pos.numInstances() ; i++) {
+				Instance instance = Pos.instance(i);
+				System.out.print("Instance " + i + " : " + instance);
+				System.out.println("\t" + instance.classValue());
+			}
+			
+			Instances Neg = getNegativeInstances(data);
+			// Parcours des Instances
+			for(int i=0 ; i<Neg.numInstances() ; i++) {
+				Instance instance = Neg.instance(i);
+				System.out.print("Instance " + i + " : " + instance);
+				System.out.println("\t" + instance.classValue());
+			}
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
