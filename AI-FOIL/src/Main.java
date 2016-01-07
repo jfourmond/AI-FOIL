@@ -4,13 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import weka.attributeSelection.GainRatioAttributeEval;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
 public class Main {
 
+	static String filename = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
+	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
 	 * @param instances : {@link Instances}
@@ -69,57 +70,21 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		 BufferedReader reader;
+		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader("/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff"));
+			reader = new BufferedReader(new FileReader(filename));
 			Instances data = new Instances(reader);
 			// setting class attribute
 			reader.close();
 			data.setClassIndex(data.numAttributes() - 1);
 			
-			// Read all the instances in the file (ARFF, CSV, XRFF, ...)
-			// DataSource source = new DataSource(filename);
-			// Instances instances = source.getDataSet();
-			
-			// Make the last attribute be the class
-			// instances.setClassIndex(instances.numAttributes() - 1);
-			
 			// Print header and instances.
-			// System.out.println("\nDataset:\n");
-			// System.out.println(data);
-			
-			// Parcours des attributs
-			for(int i=0 ; i<data.numAttributes() ; i++) {
-				System.out.println("Attribut " + i + " : " + data.attribute(i));
-			}
-			
-			System.out.println(data.classAttribute());
-			System.out.println(data.attribute(0).name());
-			System.out.println(data.attribute(0).value(0));
-			
-			// Parcours des labels de attribut (0)
-			for(int i=0 ; i<data.attribute(0).numValues() ; i++) {
-				System.out.println("Values " + i + " : " + data.attribute(0).value(i));
-			}
-			
-			// Parcours des Instances
-			for(int i=0 ; i<data.numInstances() ; i++) {
-				Instance instance = data.instance(i);
-				System.out.print("Instance " + i + " : " + instance);
-				System.out.println("\t" + instance.classValue());
-			}
-			
-			// Parcours des valeurs des attributs de l'instance 0
-			for(int i=0 ; i<data.instance(0).numValues() ; i++) {
-				System.out.println("Values " + i + " : " + data.instance(0).stringValue(i));
-			}
-			
-			GainRatioAttributeEval G = new GainRatioAttributeEval();
-			G.buildEvaluator(data);
-			System.out.println(G.evaluateAttribute(0));
+			System.out.println("\nDataset:\n");
+			System.out.println(data);
 			
 			Instances Pos = getPositiveInstances(data);
 			// Parcours des Instances
+			System.out.println("----_\tINSTANCES POSITIVES\t-----");
 			for(int i=0 ; i<Pos.numInstances() ; i++) {
 				Instance instance = Pos.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
@@ -128,14 +93,12 @@ public class Main {
 			
 			Instances Neg = getNegativeInstances(data);
 			// Parcours des Instances
+			System.out.println("----_\tINSTANCES NEGATIVES\t-----");
 			for(int i=0 ; i<Neg.numInstances() ; i++) {
 				Instance instance = Neg.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
 				System.out.println("\t" + instance.classValue());
 			}
-			
-			Literal L = new Literal(data.attribute(0), data.attribute(0).value(0));
-			L.gain(Pos, Neg);
 			
 			System.out.println(getBestLiteral(Pos, Neg));
 			

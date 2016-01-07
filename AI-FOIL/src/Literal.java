@@ -11,6 +11,22 @@ public class Literal {
 		this.label = label;
 	}
 	
+	public Attribute getAttribut() {
+		return attribut;
+	}
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public void setAttribut(Attribute attribut) {
+		this.attribut = attribut;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
 	public double gain(Instances pos, Instances neg) {
 		double P = pos.numInstances();
 		double N = neg.numInstances();
