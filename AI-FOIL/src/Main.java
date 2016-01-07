@@ -50,9 +50,7 @@ public class Main {
 	 */
 	public static Literal getBestLiteral(Instances Pos, Instances Neg) {
 		assert(Pos.equalHeaders(Neg));
-		
 		ArrayList<Literal> literals = new ArrayList<>();
-		
 		for(int i=0 ; i<Pos.numAttributes()-1 ; i++) {
 			Attribute attribute = Pos.attribute(i);
 			for(int j=0 ; j<attribute.numValues() ; j++) {
@@ -60,13 +58,109 @@ public class Main {
 				literals.add(new Literal(attribute, label));
 			}
 		}
-		
 		Literal bestLiteral = literals.get(0);
 		for(Literal L : literals) {
 			if(L.gain(Pos, Neg) > bestLiteral.gain(Pos, Neg)) bestLiteral = L;
 		}
-		
 		return bestLiteral;
+	}
+	
+	/**
+	 * Retourne les {@link Instances} qui satisfont le {@link Literal}
+	 * @param instances : {@link Instances}
+	 * @param literal : {@link Literal}
+	 * @return {@link Instances}
+	 */
+	public static Instances getSatisfyInstances(Instances instances, Literal literal) {
+		Instances data = new Instances(instances, 0);
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			for(int j=0 ; j<instance.numAttributes() ; j++) {
+				Attribute attribute = instance.attribute(j);
+				if(literal.getAttribute().equals(attribute)) {
+					Literal L = new Literal(attribute,instance.stringValue(attribute));
+					if(L.equals(literal)) data.add(instance);
+					break;
+				}
+			}
+		}
+		return data;
+	}
+	
+	/**
+	 * Retourne les {@link Instances} qui ne satisfont pas la règle
+	 * @param instances : {@link Instances}
+	 * @param literal : {@link Literal}
+	 * @return {@link Instances}
+	 */
+	public static Instances removeSatisfyInstances(Instances instances, Rule R) {
+		Instances data = new Instances(instances, 0);
+		ArrayList<Literal> literals = R.getLiterals();
+		ArrayList<Attribute> attributes = R.getConcernedAttributes();
+		for(int i=0 ;i<instances.numInstances() ; i++) {
+			ArrayList<Literal> instanceLiteral = new ArrayList<>();
+			Instance instance = instances.instance(i);
+			for(int j=0 ; j<instance.numAttributes() ; j++) {
+				Attribute attribute = instance.attribute(j);
+				if(attributes.contains(attribute)) {
+					Literal L = new Literal(attribute, instance.stringValue(attribute));
+					instanceLiteral.add(L);
+				}
+			}
+			if(!compare(literals, instanceLiteral)) data.add(instance);
+		}
+		System.out.println(data);
+		return data;
+	}
+	
+	/**
+	 * Teste si les {@link ArrayList} de {@link Literal} contiennent les mêmes {@link Literal}
+	 * @param L1 : {@link ArrayList}
+	 * @param L2 : {@link ArrayList}
+	 * @return {@link Boolean}  TRUE si les deux paramètres sont identiques, FALSE sinon
+	 */
+	public static boolean compare(ArrayList<Literal> L1, ArrayList<Literal> L2) {
+		for(Literal l : L1) {
+			if(!L2.contains(l)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static ArrayList<Rule> couvertureSequentielle(Instances instances) {
+		ArrayList<Rule> rules = new ArrayList<>();
+		Attribute AClass = instances.classAttribute();
+		Literal conclusion = new Literal(AClass, AClass.value(0));	// Est admis : la valeur de vérité de la classe est la première valeur écrite dans le fichier
+		
+		Instances Pos = getPositiveInstances(instances);
+		Instances Neg = getNegativeInstances(instances);
+		
+		while(Pos.numInstances() != 0) {
+			// Apprendre une nouvelle règle
+			Rule NewRegle = new Rule(null, conclusion);	// Règle la plus générale possible
+			Instances NegNewRegle = Neg;
+			Instances PosNewRegle = Pos;
+			while(NegNewRegle.numInstances() != 0) {
+				// Ajouter un nouveau littéral pour spécialiser New Regle
+				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle);
+				NewRegle.addLiterals(meilleur);
+				NegNewRegle = getSatisfyInstances(NegNewRegle, meilleur);
+				PosNewRegle = getSatisfyInstances(PosNewRegle, meilleur);
+				
+				System.out.println(meilleur + " " + meilleur.gain(PosNewRegle, NegNewRegle));
+				// TODO Boucle ici
+				for(int i=0 ; i<NegNewRegle.numInstances() ; i++) {
+					Instance instance = NegNewRegle.instance(i);
+					System.out.print("Instance " + i + " : " + instance);
+					System.out.println("\t" + instance.classValue());
+				}
+			}
+			rules.add(NewRegle);
+			System.out.println("Ajout de : " + NewRegle);
+			Pos = removeSatisfyInstances(Pos, NewRegle);
+		}
+		return rules;
 	}
 	
 	public static void main(String[] args) {
@@ -84,7 +178,7 @@ public class Main {
 			
 			Instances Pos = getPositiveInstances(data);
 			// Parcours des Instances
-			System.out.println("----_\tINSTANCES POSITIVES\t-----");
+			System.out.println("\n-----\tINSTANCES POSITIVES\t-----");
 			for(int i=0 ; i<Pos.numInstances() ; i++) {
 				Instance instance = Pos.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
@@ -93,14 +187,31 @@ public class Main {
 			
 			Instances Neg = getNegativeInstances(data);
 			// Parcours des Instances
-			System.out.println("----_\tINSTANCES NEGATIVES\t-----");
+			System.out.println("-----\tINSTANCES NEGATIVES\t-----");
 			for(int i=0 ; i<Neg.numInstances() ; i++) {
 				Instance instance = Neg.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
 				System.out.println("\t" + instance.classValue());
 			}
 			
-			System.out.println(getBestLiteral(Pos, Neg));
+			Literal L = getBestLiteral(Pos, Neg);
+			
+			System.out.println("\nBest Literal : " + L + "\n");
+			
+			Instances satisfy = getSatisfyInstances(data, L);
+			// Parcours des instances satisfiant L
+			System.out.println("-----\tINSTANCES SATISFAISANTES\t-----");
+			for(int i=0 ; i<satisfy.numInstances() ; i++) {
+				Instance instance = satisfy.instance(i);
+				System.out.print("Instance " + i + " : " + instance);
+			}
+			
+			ArrayList<Rule> gen_rules = couvertureSequentielle(data);
+			// Parcours des règles générées
+			System.out.println("\n-----\tREGLES générées\t-----");
+			for(Rule R : gen_rules) {
+				System.out.println(R);
+			}
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

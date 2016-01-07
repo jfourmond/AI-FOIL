@@ -3,16 +3,16 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class Literal {
-	private Attribute attribut;
+	private Attribute attribute;
 	private String label;
 	
-	public Literal(Attribute attribut, String label) {
-		this.attribut = attribut;
+	public Literal(Attribute attribute, String label) {
+		this.attribute = attribute;
 		this.label = label;
 	}
 	
-	public Attribute getAttribut() {
-		return attribut;
+	public Attribute getAttribute() {
+		return attribute;
 	}
 	
 	public String getLabel() {
@@ -20,7 +20,7 @@ public class Literal {
 	}
 	
 	public void setAttribut(Attribute attribut) {
-		this.attribut = attribut;
+		this.attribute = attribut;
 	}
 	
 	public void setLabel(String label) {
@@ -36,15 +36,14 @@ public class Literal {
 		// p le nombre d'exemples dans Pos qui satisfont L
 		for(int i=0 ; i<pos.numInstances() ; i++) {
 			Instance instance = pos.instance(i);
-			if(instance.stringValue(attribut).equals(label)) p++;
+			if(instance.stringValue(attribute).equals(label)) p++;
 		}
 		
 		// n le nombre d'exemples dans Neg qui satisfont L
 		for(int i=0 ; i<neg.numInstances() ; i++) {
 			Instance instance = neg.instance(i);
-			if(instance.stringValue(attribut).equals(label)) n++;
+			if(instance.stringValue(attribute).equals(label)) n++;
 		}
-		
 		return (p * (log2(p / (p+n)) - log2(P / (P + N))));
 	}
 	
@@ -54,6 +53,17 @@ public class Literal {
 	
 	@Override
 	public String toString() {
-		return attribut.name() + " = " + label;
+		return attribute.name() + " = " + label;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			Literal L = (Literal) obj;
+			if(L.attribute.equals(attribute) && L.label.equals(label)) return true;
+			else return false;
+		} catch (ClassCastException E) {
+			return false;
+		}
 	}
 }

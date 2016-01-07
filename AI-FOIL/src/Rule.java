@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import weka.core.Attribute;
+
 public class Rule {
 	private ArrayList<Literal> literals;
 	private Literal conclusion;
@@ -31,11 +33,40 @@ public class Rule {
 	}
 	
 	/**
+	 * Retourne les {@link Attribute} concernées par la règle
+	 * @return {@link ArrayList}
+	 */
+	public ArrayList<Attribute> getConcernedAttributes() {
+		ArrayList<Attribute> attributes = new ArrayList<>();
+		for(Literal L : literals) {
+			attributes.add(L.getAttribute());
+		}
+		return attributes;
+	}
+	
+	/**
 	 * Ajoute un litéral à la liste de litéraux
 	 * @param L : {@link Literal}
 	 * @return {@link Boolean} : TRUE si l'ajout a été effectuée ou FALSE si un problème a été rencontré
 	 */
 	public boolean addLiterals(Literal L) {
+		if(literals == null) literals = new ArrayList<>();
 		return literals.add(L);
+	}
+	
+	@Override
+	public String toString() {
+		String ch = "SI ";
+		for(Literal L : literals) {
+			ch += L + " ET ";
+		}
+		ch += " ALORS " + conclusion;
+		return ch;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return super.equals(obj);
 	}
 }
