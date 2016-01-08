@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -63,6 +64,8 @@ public class Interface extends JFrame implements ActionListener{
 
 	private void buildComposants() throws Exception {
 		fc = new JFileChooser(new File("~"));
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.addChoosableFileFilter(new ArffFileFilter());
 		
 		menu_bar = new JMenuBar();
 		file = new JMenu("Fichier");
@@ -138,9 +141,9 @@ public class Interface extends JFrame implements ActionListener{
 				    System.out.println(fichier.getAbsolutePath());
 				    try {
 						new Interface(fichier.getAbsolutePath());
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					} catch (Exception E) {
+						E.printStackTrace();
+						JOptionPane.showMessageDialog(null, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -161,10 +164,10 @@ public class Interface extends JFrame implements ActionListener{
 		public void run() {
 			// Calcul des règles et affichage
 			ArrayList<Rule> rules = Main.couvertureSequentielle(instances);
-			System.out.println(rules);
 			for(Rule R : rules) {
 				rules_area.append(R.toString() + "\n");
 			}
+			validate();
 			System.out.println("END compute rules");
 			super.run();
 		}
