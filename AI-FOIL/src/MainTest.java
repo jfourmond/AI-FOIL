@@ -97,6 +97,8 @@ public class MainTest {
 				System.out.println("\t" + instance.classValue());
 			}
 			
+			new Interface(filename);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
