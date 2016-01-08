@@ -183,6 +183,8 @@ public class Main {
 			
 			PrintConsole.data(data);
 			
+			new Interface(filename);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

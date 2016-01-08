@@ -57,8 +57,10 @@ public class Rule {
 	@Override
 	public String toString() {
 		String ch = "SI ";
-		for(Literal L : literals) {
-			ch += L + " ET ";
+		for(int i=0 ; i<literals.size() ; i++) {
+			Literal L = literals.get(i);
+			if(i == literals.size()-1) ch += L;
+			else ch += L + " ET ";
 		}
 		ch += " ALORS " + conclusion;
 		return ch;
