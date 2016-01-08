@@ -6,6 +6,11 @@ public class Literal {
 	private Attribute attribute;
 	private String label;
 	
+	public Literal() {
+		attribute = null;
+		label = "";
+	}
+	
 	public Literal(Attribute attribute, String label) {
 		this.attribute = attribute;
 		this.label = label;

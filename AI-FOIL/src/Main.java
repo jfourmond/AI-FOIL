@@ -10,7 +10,7 @@ import weka.core.Instances;
 
 public class Main {
 
-	static String filename = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
+	static String filename; // = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
 	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
@@ -125,6 +125,11 @@ public class Main {
 		return true;
 	}
 	
+	/**
+	 * Génère des règles à partir des {@link Instances} passées en paramètre
+	 * @param instances : {@link Instances}
+	 * @return {@link ArrayList}
+	 */
 	public static ArrayList<Rule> couvertureSequentielle(Instances instances) {
 		ArrayList<Rule> rules = new ArrayList<>();
 		Attribute AClass = instances.classAttribute();
@@ -154,6 +159,10 @@ public class Main {
 	public static void main(String[] args) {
 		BufferedReader reader;
 		try {
+			if(args.length > 0) {
+				filename = args[0];
+			} else throw new Exception("Aucun argument passé en paramètre");
+			
 			reader = new BufferedReader(new FileReader(filename));
 			Instances data = new Instances(reader);
 			// setting class attribute
@@ -164,14 +173,15 @@ public class Main {
 			System.out.println("\nDataset:\n");
 			System.out.println(data);
 			
-			
-			
 			ArrayList<Rule> gen_rules = couvertureSequentielle(data);
 			// Parcours des règles générées
 			System.out.println("\n-----\tREGLES GENEREES\t-----");
 			for(Rule R : gen_rules) {
 				System.out.println(R);
 			}
+			System.out.println("\n");
+			
+			PrintConsole.data(data);
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
