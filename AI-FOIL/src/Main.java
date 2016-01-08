@@ -62,7 +62,6 @@ public class Main {
 		Literal bestLiteral = literals.get(0);
 		for(Literal L : literals) {
 			if(L.gain(Pos, Neg) > bestLiteral.gain(Pos, Neg)) bestLiteral = L;
-			System.out.println("Best : " + bestLiteral);
 		}
 		return bestLiteral;
 	}
@@ -121,13 +120,8 @@ public class Main {
 	 * @return {@link Boolean}  TRUE si les deux paramètres sont identiques, FALSE sinon
 	 */
 	public static boolean compare(ArrayList<Literal> L1, ArrayList<Literal> L2) {
-		for(Literal l : L1) {
-			if(!L2.contains(l)) {
-				System.out.print(L1 + " différent de " + L2);
-				return false;
-			}
-		}
-		System.out.print(L1 + " semblable de " + L2);
+		for(Literal l : L1)
+			if(!L2.contains(l)) return false;
 		return true;
 	}
 	
@@ -150,15 +144,8 @@ public class Main {
 				NewRegle.addLiterals(meilleur);
 				NegNewRegle = getSatisfyInstances(NegNewRegle, meilleur);
 				PosNewRegle = getSatisfyInstances(PosNewRegle, meilleur);
-				
-				// TODO Boucle ici : Etudier Erreur
-				for(int i=0 ; i<NegNewRegle.numInstances() ; i++) {
-					Instance instance = NegNewRegle.instance(i);
-					System.out.println("Instance " + i + " : " + instance);
-				}
 			}
 			rules.add(NewRegle);
-			System.out.println("Ajout de : " + NewRegle);
 			Pos = removeSatisfyInstances(Pos, NewRegle);
 		}
 		return rules;
@@ -177,27 +164,11 @@ public class Main {
 			System.out.println("\nDataset:\n");
 			System.out.println(data);
 			
-			Instances Pos = getPositiveInstances(data);
-			// Parcours des Instances
-			System.out.println("\n-----\tINSTANCES POSITIVES\t-----");
-			for(int i=0 ; i<Pos.numInstances() ; i++) {
-				Instance instance = Pos.instance(i);
-				System.out.print("Instance " + i + " : " + instance);
-				System.out.println("\t" + instance.classValue());
-			}
 			
-			Instances Neg = getNegativeInstances(data);
-			// Parcours des Instances
-			System.out.println("-----\tINSTANCES NEGATIVES\t-----");
-			for(int i=0 ; i<Neg.numInstances() ; i++) {
-				Instance instance = Neg.instance(i);
-				System.out.print("Instance " + i + " : " + instance);
-				System.out.println("\t" + instance.classValue());
-			}
 			
 			ArrayList<Rule> gen_rules = couvertureSequentielle(data);
 			// Parcours des règles générées
-			System.out.println("\n-----\tREGLES générées\t-----");
+			System.out.println("\n-----\tREGLES GENEREES\t-----");
 			for(Rule R : gen_rules) {
 				System.out.println(R);
 			}

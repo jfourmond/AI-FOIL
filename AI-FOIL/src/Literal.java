@@ -28,8 +28,8 @@ public class Literal {
 	}
 	
 	public double gain(Instances pos, Instances neg) {
-		double P = pos.numInstances();
-		double N = neg.numInstances();
+		double P = (double) pos.numInstances();
+		double N = (double) neg.numInstances();
 		double p = 0;
 		double n = 0;
 		
@@ -44,11 +44,11 @@ public class Literal {
 			Instance instance = neg.instance(i);
 			if(instance.stringValue(attribute).equals(label)) n++;
 		}
-		System.out.println(label + " : " + (p * (log2(p / (p+n)) - log2(P / (P + N)))));
+		if(p == 0 /*|| P == 0*/) return Double.MIN_VALUE;
 		return (p * (log2(p / (p+n)) - log2(P / (P + N))));
 	}
 	
-	public static double log2(double x) {
+	private double log2(double x) {
 		return Math.log(x) / Math.log(2);
 	}
 	
