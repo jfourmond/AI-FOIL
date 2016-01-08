@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import weka.core.Attribute;
@@ -19,11 +20,13 @@ public class Interface extends JFrame implements ActionListener{
 	
 	private JPanel main_panel;
 		private JTable table_instances;
+		private JScrollPane scroll_panel;
 		
 	private String filename;
 	private Instances instances;
 	
 	public Interface(String filename) throws Exception {
+		super(filename);
 		this.filename = filename;
 		
 		BufferedReader reader = new BufferedReader(new FileReader(this.filename));
@@ -36,7 +39,8 @@ public class Interface extends JFrame implements ActionListener{
 		buildInterface();
 		buildEvents();
 		
-		setSize(400, 300);
+		setResizable(true);
+		setSize(500, 400);
 		setVisible(true);
 	}
 
@@ -48,6 +52,7 @@ public class Interface extends JFrame implements ActionListener{
 				Attribute attribute = instances.attribute(i);
 				en_tete.add(attribute.name());
 			}
+			System.out.println(en_tete);
 			// Création des valeurs
 			Vector<Vector <String>> rowData = new Vector<>(instances.numInstances());
 			for(int i=0 ; i<instances.numInstances() ; i++) {
@@ -62,11 +67,13 @@ public class Interface extends JFrame implements ActionListener{
 				}
 			}
 			table_instances = new JTable(rowData, en_tete);
+			scroll_panel = new JScrollPane(table_instances);
 	}
 	
 	private void buildInterface() {
-		main_panel.add(table_instances, BorderLayout.CENTER);
-		this.setContentPane(main_panel);
+		main_panel.add(scroll_panel, BorderLayout.CENTER);
+		 this.setContentPane(main_panel);
+		//this.setContentPane(scroll_panel);
 	}
 	
 	private void buildEvents() {
