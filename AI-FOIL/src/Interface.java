@@ -97,14 +97,8 @@ public class Interface extends JFrame implements ActionListener{
 				scroll_panel = new JScrollPane(table_instances);
 			down_panel = new JPanel();
 				rules_area = new JTextArea();
-				// Calcul des règles et affichage
-				// TODO effectuer le calcul dans un thread pour ne pas gêner l'affichage
-				ArrayList<Rule> rules = Main.couvertureSequentielle(instances);
-				for(Rule R : rules) {
-					rules_area.append(R.toString() + "\n");
-				}
-				rules_area.setEditable(false);
 				scroll_panel_text = new JScrollPane(rules_area);
+				new CalculRules(instances).start();
 	}
 	
 	private void buildInterface() {
@@ -135,7 +129,7 @@ public class Interface extends JFrame implements ActionListener{
 		if(O.getClass() == JMenuItem.class) {
 			JMenuItem MI = (JMenuItem) O;
 			if(MI == item_exit)
-				System.exit(EXIT_ON_CLOSE);
+				System.exit(DISPOSE_ON_CLOSE);
 			else if(MI == item_load) {
 				File fichier;
 				if (fc.showOpenDialog(null)== 
@@ -150,6 +144,29 @@ public class Interface extends JFrame implements ActionListener{
 					}
 				}
 			}
+		}
+	}
+	
+	private class CalculRules extends Thread {
+		private Instances instances;
+		
+		
+		public CalculRules(Instances instances) {
+			this.instances = instances;
+			
+			rules_area.setEditable(false);
+		}
+		
+		@Override
+		public void run() {
+			// Calcul des règles et affichage
+			ArrayList<Rule> rules = Main.couvertureSequentielle(instances);
+			System.out.println(rules);
+			for(Rule R : rules) {
+				rules_area.append(R.toString() + "\n");
+			}
+			System.out.println("END compute rules");
+			super.run();
 		}
 	}
 
