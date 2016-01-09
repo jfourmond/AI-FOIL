@@ -66,6 +66,17 @@ public class Rule {
 		return ch;
 	}
 	
+	public String toStringHTML() {
+		String ch = "<i>SI </i>";
+		for(int i=0 ; i<literals.size() ; i++) {
+			Literal L = literals.get(i);
+			if(i == literals.size()-1) ch += "<b>" + L + "</b>";
+			else ch += "<b>" +  L + "</b> ET ";
+		}
+		ch += " <i>ALORS</i> <b>" + conclusion + "</b>";
+		return ch;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,8 +16,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -34,9 +35,12 @@ public class Interface extends JFrame implements ActionListener{
 		private JPanel center_panel;
 			private JTable table_instances;
 			private JScrollPane scroll_panel;
+			private JSplitPane split_panel;
 		private JPanel down_panel;
-			private JTextArea rules_area;
+			private JEditorPane rules_area;
 			private JScrollPane scroll_panel_text;
+			
+			
 	
 	private JFileChooser fc;
 			
@@ -58,7 +62,7 @@ public class Interface extends JFrame implements ActionListener{
 		buildEvents();
 		
 		setResizable(true);
-		setSize(500, 400);
+		setSize(600, 500);
 		setVisible(true);
 	}
 
@@ -73,7 +77,7 @@ public class Interface extends JFrame implements ActionListener{
 			item_exit = new JMenuItem("Quitter");
 		
 		main_panel = new JPanel(new BorderLayout());
-			center_panel = new JPanel();
+			center_panel = new JPanel(new BorderLayout());
 				// Création de l'en-tête
 				Vector<String> en_tete = new Vector<>(instances.numAttributes());
 				for(int i=0 ; i<instances.numAttributes() ; i++) {
@@ -94,13 +98,18 @@ public class Interface extends JFrame implements ActionListener{
 						rowData.elementAt(i).add(instance.stringValue(attribute));
 					}
 				}
+				
 				table_instances = new JTable(rowData, en_tete);
 				table_instances.setEnabled(false);
 				table_instances.setAutoCreateRowSorter(true);
 				scroll_panel = new JScrollPane(table_instances);
-			down_panel = new JPanel();
-				rules_area = new JTextArea();
+				scroll_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				
+			down_panel = new JPanel(new BorderLayout());
+				rules_area = new JEditorPane();
+				// rules_area.setLineWrap(true);
 				scroll_panel_text = new JScrollPane(rules_area);
+				scroll_panel_text.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 				new CalculRules(instances).start();
 	}
 	
@@ -109,10 +118,13 @@ public class Interface extends JFrame implements ActionListener{
 		file.add(item_exit);
 		menu_bar.add(file);
 		
-			center_panel.add(scroll_panel);
-			down_panel.add(scroll_panel_text);
-		main_panel.add(center_panel, BorderLayout.CENTER);
-		main_panel.add(down_panel, BorderLayout.SOUTH);
+			center_panel.add(scroll_panel, BorderLayout.CENTER);
+			down_panel.add(scroll_panel_text, BorderLayout.CENTER);
+			
+			split_panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, center_panel, down_panel);
+			split_panel.setDividerLocation(350);
+		main_panel.add(split_panel, BorderLayout.CENTER);
+		// main_panel.add(down_panel, BorderLayout.SOUTH);
 		
 		setJMenuBar(menu_bar);
 		setContentPane(main_panel);
@@ -123,7 +135,6 @@ public class Interface extends JFrame implements ActionListener{
 		item_load.addActionListener(this);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
 	}
 	
 	@Override
@@ -132,7 +143,7 @@ public class Interface extends JFrame implements ActionListener{
 		if(O.getClass() == JMenuItem.class) {
 			JMenuItem MI = (JMenuItem) O;
 			if(MI == item_exit)
-				System.exit(DISPOSE_ON_CLOSE);
+				dispose();
 			else if(MI == item_load) {
 				File fichier;
 				if (fc.showOpenDialog(null)== 
@@ -153,24 +164,24 @@ public class Interface extends JFrame implements ActionListener{
 	private class CalculRules extends Thread {
 		private Instances instances;
 		
-		
 		public CalculRules(Instances instances) {
 			this.instances = instances;
-			
 			rules_area.setEditable(false);
 		}
 		
 		@Override
 		public void run() {
+			String ch = "";
+			rules_area.setContentType("text/html");
 			// Calcul des règles et affichage
 			ArrayList<Rule> rules = Main.couvertureSequentielle(instances);
 			for(Rule R : rules) {
-				rules_area.append(R.toString() + "\n");
+				ch += " <li>" + R.toStringHTML() + "</li>\n";
+				rules_area.setText(ch);
+				validate();
 			}
-			validate();
 			System.out.println("END compute rules");
 			super.run();
 		}
 	}
-
 }
