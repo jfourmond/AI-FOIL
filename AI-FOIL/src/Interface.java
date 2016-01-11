@@ -44,7 +44,8 @@ public class Interface extends JFrame implements ActionListener{
 			
 			private JSplitPane split_panel;
 			
-	
+	private double class_value = 0.0;
+			
 	private JFileChooser fc;
 			
 	private String filename;
@@ -116,14 +117,14 @@ public class Interface extends JFrame implements ActionListener{
 				info_area = new JEditorPane();
 				info_area.setContentType("text/html");
 				info_area.setText(	"Instance : <b>" + instances.numInstances() + "</b><br/>" +
-									"Instances positives : <b>" + Main.getPositiveInstances(instances).numInstances() + "</b><br/>" +
-									"Instances négatives : <b>" + Main.getNegativeInstances(instances).numInstances() + "</b>");
+									"Instances positives : <b>" + Main.getPositiveInstances(instances, class_value).numInstances() + "</b><br/>" +
+									"Instances négatives : <b>" + Main.getNegativeInstances(instances, class_value).numInstances() + "</b>");
 			down_panel = new JPanel(new BorderLayout());
 				rules_area = new JEditorPane();
 				scroll_panel_text = new JScrollPane(rules_area);
 				scroll_panel_text.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-				change_class_value = new JButton("Classe =  " + instances.classAttribute().value(0));
-				new CalculRules(instances).start();
+				change_class_value = new JButton("Classe =  " + instances.classAttribute().value((int) class_value));
+				new CalculRules(instances, class_value).start();
 	}
 	
 	private void buildInterface() {
@@ -176,7 +177,18 @@ public class Interface extends JFrame implements ActionListener{
 		} else if(O.getClass() == JButton.class) {
 			JButton B = (JButton) O;
 			if(B == change_class_value) {
-				System.out.println("Clic à remplir : " + B.getText());
+				int size = instances.classAttribute().numValues();
+				Object[] possibilities = new Object[size];
+				for(int i=0 ; i<size ; i++) {
+					possibilities[i] = instances.classAttribute().value(i);
+				}
+				String s = (String)JOptionPane.showInputDialog(null, "Valeur actuelle : " + instances.classAttribute().value((int) class_value) + "\nChoisir la nouvelle valeur : \n", "AI-FOIL", JOptionPane.PLAIN_MESSAGE, null, possibilities, null);
+				if ((s != null) && (s.length() > 0)) {
+					class_value = Main.getClassValue(instances, s);
+					change_class_value.setText("Classe =  " + instances.classAttribute().value((int) class_value));
+					new CalculRules(instances, class_value).start();
+					return;
+				}
 			}
 		}
 	}
@@ -186,9 +198,11 @@ public class Interface extends JFrame implements ActionListener{
 	 */
 	private class CalculRules extends Thread {
 		private Instances instances;
+		private double value_class;
 		
-		public CalculRules(Instances instances) {
+		public CalculRules(Instances instances, double value_class) {
 			this.instances = instances;
+			this.value_class = value_class;
 			rules_area.setEditable(false);
 		}
 		
@@ -197,7 +211,7 @@ public class Interface extends JFrame implements ActionListener{
 			String ch = "";
 			rules_area.setContentType("text/html");
 			// Calcul des règles et affichage
-			ArrayList<Rule> rules = Main.couvertureSequentielle(instances);
+			ArrayList<Rule> rules = Main.couvertureSequentielle(instances, value_class);
 			for(Rule R : rules) {
 				ch += " <li>" + R.toStringHTML() + "</li>";
 				rules_area.setText(ch);

@@ -49,7 +49,7 @@ public class Literal {
 			Instance instance = neg.instance(i);
 			if(instance.stringValue(attribute).equals(label)) n++;
 		}
-		if(p == 0 /*|| P == 0*/) return Double.MIN_VALUE;
+		if(p == 0) return Double.MIN_VALUE;
 		return (p * (log2(p / (p+n)) - log2(P / (P + N))));
 	}
 	

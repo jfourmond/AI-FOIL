@@ -13,17 +13,18 @@ public class Main {
 	static String filename; // = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
 	
 	// TODO laisser le choix à l'utilisateur de choisir l'attribut de la classe à calculer
+	// TODO -> Ajouter un paramètre double (caractérisant la valeur de la classe) à getPositiveInstances et getNegativeInstances
 	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
 	 * @param instances : {@link Instances}
 	 * @return {@link Instances}
 	 */
-	public static Instances getPositiveInstances(Instances instances) {
+	public static Instances getPositiveInstances(Instances instances, double value_class) {
 		Instances pos = new Instances(instances, 0);
 		for(int i=0 ; i<instances.numInstances() ; i++) {
 			Instance instance = instances.instance(i);
-			if(instance.classValue() == 0.0)
+			if(instance.classValue() == value_class)
 				pos.add(instance);
 		}
 		return pos;
@@ -34,11 +35,11 @@ public class Main {
 	 * @param instances : {@link Instances}
 	 * @return {@link Instances}
 	 */
-	public static Instances getNegativeInstances(Instances instances) {
+	public static Instances getNegativeInstances(Instances instances, double value_class) {
 		Instances neg = new Instances(instances, 0);
 		for(int i=0 ; i<instances.numInstances() ; i++) {
 			Instance instance = instances.instance(i);
-			if(instance.classValue() == 1.0)
+			if(instance.classValue() != value_class)
 				neg.add(instance);
 		}
 		return neg;
@@ -127,18 +128,27 @@ public class Main {
 		return true;
 	}
 	
+	public static double getClassValue(Instances instances, String s) {
+		Attribute attribute = instances.classAttribute();
+		for(int i=0 ; i<attribute.numValues() ; i++) {
+			String value = attribute.value(i);
+			if(value.equals(s)) return (double) i;
+		}
+		return (Double) null;
+	}
+	
 	/**
 	 * Génère des règles à partir des {@link Instances} passées en paramètre
 	 * @param instances : {@link Instances}
 	 * @return {@link ArrayList}
 	 */
-	public static ArrayList<Rule> couvertureSequentielle(Instances instances) {
+	public static ArrayList<Rule> couvertureSequentielle(Instances instances, double value_class) {
 		ArrayList<Rule> rules = new ArrayList<>();
 		Attribute AClass = instances.classAttribute();
-		Literal conclusion = new Literal(AClass, AClass.value(0));	// Est admis : la valeur de vérité de la classe est la première valeur écrite dans le fichier
+		Literal conclusion = new Literal(AClass, AClass.value((int) value_class));	// Est admis : la valeur de vérité de la classe est la première valeur écrite dans le fichier
 		
-		Instances Pos = getPositiveInstances(instances);
-		Instances Neg = getNegativeInstances(instances);
+		Instances Pos = getPositiveInstances(instances, value_class);
+		Instances Neg = getNegativeInstances(instances, value_class);
 		
 		while(Pos.numInstances() != 0) {
 			// Apprendre une nouvelle règle
@@ -175,7 +185,7 @@ public class Main {
 			System.out.println("\nDataset:\n");
 			System.out.println(data);
 			
-			ArrayList<Rule> gen_rules = couvertureSequentielle(data);
+			ArrayList<Rule> gen_rules = couvertureSequentielle(data, 0.0);
 			// Parcours des règles générées
 			System.out.println("\n-----\tREGLES GENEREES\t-----");
 			for(Rule R : gen_rules) {
@@ -184,9 +194,6 @@ public class Main {
 			System.out.println("\n");
 			
 			PrintConsole.data(data);
-			
-			// new Interface(filename);
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
