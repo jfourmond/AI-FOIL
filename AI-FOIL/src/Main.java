@@ -12,6 +12,8 @@ public class Main {
 
 	static String filename; // = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
 	
+	// TODO laisser le choix à l'utilisateur de choisir l'attribut de la classe à calculer
+	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
 	 * @param instances : {@link Instances}

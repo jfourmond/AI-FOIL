@@ -1,11 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -26,9 +26,6 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 	private JPanel east_panel;
 		private JButton openFile;
 		private JButton exit;
-	
-	
-	// TODO Partie information
 	
 	private JPanel main_panel;
 	
@@ -52,7 +49,6 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 		
 		main_panel = new JPanel(new BorderLayout());
 			west_panel = new JPanel();
-			// west_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				info = new JEditorPane();
 				info.setEditable(false);
 				try {
@@ -60,8 +56,7 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 				} catch (IOException e) {
 					System.err.println(e.getMessage());
 				}
-			east_panel = new JPanel();
-			east_panel.setLayout(new BoxLayout(east_panel, BoxLayout.PAGE_AXIS));
+			east_panel = new JPanel(new GridLayout(0, 1));
 				openFile = new JButton("Ouvrir");
 				openFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 				exit = new JButton("Quitter");
