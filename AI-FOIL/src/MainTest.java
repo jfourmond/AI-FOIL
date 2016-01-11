@@ -8,7 +8,7 @@ import weka.core.Instances;
 
 public class MainTest {
 	
-	static String filename = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
+	static String filename = "/home/etudiant/Outils/weka-3-6-13/data/contact-lenses.arff";
 
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
@@ -52,35 +52,17 @@ public class MainTest {
 			// Print header and instances.
 			System.out.println("\nDataset:\n");
 			System.out.println(data);
-			
-			// Parcours des attributs
-			for(int i=0 ; i<data.numAttributes() ; i++) {
-				System.out.println("Attribut " + i + " : " + data.attribute(i));
-			}
-			
-			System.out.println(data.classAttribute());
-			System.out.println(data.attribute(0).name());
-			System.out.println(data.attribute(0).value(0));
-			
-			// Parcours des labels de attribut (0)
-			for(int i=0 ; i<data.attribute(0).numValues() ; i++) {
-				System.out.println("Values " + i + " : " + data.attribute(0).value(i));
-			}
-			
-			// Parcours des Instances
+
+			// Parcours des Instances Positives
+			System.out.println("\n-----\tTOUTES LES INSTANCES\t-----");
 			for(int i=0 ; i<data.numInstances() ; i++) {
 				Instance instance = data.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
 				System.out.println("\t" + instance.classValue());
 			}
 			
-			// Parcours des valeurs des attributs de l'instance 0
-			for(int i=0 ; i<data.instance(0).numValues() ; i++) {
-				System.out.println("Values " + i + " : " + data.instance(0).stringValue(i));
-			}
-			
 			Instances Pos = getPositiveInstances(data);
-			// Parcours des Instances
+			// Parcours des Instances Positives
 			System.out.println("\n-----\tINSTANCES POSITIVES\t-----");
 			for(int i=0 ; i<Pos.numInstances() ; i++) {
 				Instance instance = Pos.instance(i);
@@ -89,7 +71,7 @@ public class MainTest {
 			}
 			
 			Instances Neg = getNegativeInstances(data);
-			// Parcours des Instances
+			// Parcours des Instances Negatives
 			System.out.println("-----\tINSTANCES NEGATIVES\t-----");
 			for(int i=0 ; i<Neg.numInstances() ; i++) {
 				Instance instance = Neg.instance(i);
