@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -39,6 +40,8 @@ public class Interface extends JFrame implements ActionListener{
 		private JPanel down_panel;
 			private JEditorPane rules_area;
 			private JScrollPane scroll_panel_text;
+			private JButton change_class_value;
+			
 			private JSplitPane split_panel;
 			
 	
@@ -87,9 +90,16 @@ public class Interface extends JFrame implements ActionListener{
 				// Création des valeurs
 				Vector<Vector <String>> rowData = new Vector<>(instances.numInstances());
 				for(int i=0 ; i<instances.numInstances() ; i++) {
+					Instance instance = instances.instance(i);
 					Vector<String> V = new Vector<>();
 					rowData.add(V);
+					for(int j=0 ; j<instances.numAttributes() ; j++) {
+						Attribute attribute = instance.attribute(j);
+						rowData.elementAt(i).add(instance.stringValue(attribute));
+					}
+					
 				}
+				/*
 				for(int i=0 ; i<instances.numInstances() ; i++) {
 					Instance instance = instances.instance(i);
 					for(int j=0 ; j<instances.numAttributes() ; j++) {
@@ -97,6 +107,7 @@ public class Interface extends JFrame implements ActionListener{
 						rowData.elementAt(i).add(instance.stringValue(attribute));
 					}
 				}
+				*/
 				table_instances = new JTable(rowData, en_tete);
 				table_instances.setEnabled(false);
 				table_instances.setAutoCreateRowSorter(true);
@@ -109,9 +120,9 @@ public class Interface extends JFrame implements ActionListener{
 									"Instances négatives : <b>" + Main.getNegativeInstances(instances).numInstances() + "</b>");
 			down_panel = new JPanel(new BorderLayout());
 				rules_area = new JEditorPane();
-				// rules_area.setLineWrap(true);
 				scroll_panel_text = new JScrollPane(rules_area);
 				scroll_panel_text.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				change_class_value = new JButton("Classe =  " + instances.classAttribute().value(0));
 				new CalculRules(instances).start();
 	}
 	
@@ -123,11 +134,11 @@ public class Interface extends JFrame implements ActionListener{
 			center_panel.add(scroll_panel, BorderLayout.CENTER);
 			center_panel.add(info_area, BorderLayout.SOUTH);
 			down_panel.add(scroll_panel_text, BorderLayout.CENTER);
+			down_panel.add(change_class_value, BorderLayout.EAST);
 			
 			split_panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, center_panel, down_panel);
 			split_panel.setDividerLocation(350);
 		main_panel.add(split_panel, BorderLayout.CENTER);
-		// main_panel.add(down_panel, BorderLayout.SOUTH);
 		
 		setJMenuBar(menu_bar);
 		setContentPane(main_panel);
@@ -136,6 +147,8 @@ public class Interface extends JFrame implements ActionListener{
 	private void buildEvents() {
 		item_exit.addActionListener(this);
 		item_load.addActionListener(this);
+		
+		change_class_value.addActionListener(this);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
@@ -159,6 +172,11 @@ public class Interface extends JFrame implements ActionListener{
 						JOptionPane.showMessageDialog(null, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
+			}
+		} else if(O.getClass() == JButton.class) {
+			JButton B = (JButton) O;
+			if(B == change_class_value) {
+				System.out.println("Clic à remplir : " + B.getText());
 			}
 		}
 	}
