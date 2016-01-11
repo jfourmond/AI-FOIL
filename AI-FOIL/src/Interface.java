@@ -32,8 +32,10 @@ public class Interface extends JFrame implements ActionListener{
 	private JMenu file;
 		private JMenuItem item_load;
 		private JMenuItem item_exit;
-	private JPanel main_panel;
-		private JPanel center_panel;
+	private JMenu edit;
+		private JMenuItem item_edit_value;
+	private JSplitPane main_panel;
+		private JSplitPane center_panel;
 			private JTable table_instances;
 			private JScrollPane scroll_panel;
 			private JEditorPane info_area;
@@ -41,8 +43,6 @@ public class Interface extends JFrame implements ActionListener{
 			private JEditorPane rules_area;
 			private JScrollPane scroll_panel_text;
 			private JButton change_class_value;
-			
-			private JSplitPane split_panel;
 			
 	private double class_value = 0.0;
 			
@@ -66,7 +66,7 @@ public class Interface extends JFrame implements ActionListener{
 		buildEvents();
 		
 		setResizable(true);
-		setSize(600, 500);
+		setSize(800, 500);
 		setVisible(true);
 	}
 
@@ -79,67 +79,61 @@ public class Interface extends JFrame implements ActionListener{
 		file = new JMenu("Fichier");
 			item_load = new JMenuItem("Charger");
 			item_exit = new JMenuItem("Quitter");
+		edit = new JMenu("Edition");
+			item_edit_value = new JMenuItem("Valeur de classe");
 		
-		main_panel = new JPanel(new BorderLayout());
-			center_panel = new JPanel(new BorderLayout());
-				// Création de l'en-tête
-				Vector<String> en_tete = new Vector<>(instances.numAttributes());
-				for(int i=0 ; i<instances.numAttributes() ; i++) {
-					Attribute attribute = instances.attribute(i);
-					en_tete.add(attribute.name());
-				}
-				// Création des valeurs
-				Vector<Vector <String>> rowData = new Vector<>(instances.numInstances());
-				for(int i=0 ; i<instances.numInstances() ; i++) {
-					Instance instance = instances.instance(i);
-					Vector<String> V = new Vector<>();
-					rowData.add(V);
-					for(int j=0 ; j<instances.numAttributes() ; j++) {
-						Attribute attribute = instance.attribute(j);
-						rowData.elementAt(i).add(instance.stringValue(attribute));
-					}
-					
-				}
-				/*
-				for(int i=0 ; i<instances.numInstances() ; i++) {
-					Instance instance = instances.instance(i);
-					for(int j=0 ; j<instances.numAttributes() ; j++) {
-						Attribute attribute = instance.attribute(j);
-						rowData.elementAt(i).add(instance.stringValue(attribute));
-					}
-				}
-				*/
-				table_instances = new JTable(rowData, en_tete);
-				table_instances.setEnabled(false);
-				table_instances.setAutoCreateRowSorter(true);
-				scroll_panel = new JScrollPane(table_instances);
-				scroll_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-				info_area = new JEditorPane();
-				info_area.setContentType("text/html");
-				info_area.setText(	"Instance : <b>" + instances.numInstances() + "</b><br/>" +
-									"Instances positives : <b>" + Main.getPositiveInstances(instances, class_value).numInstances() + "</b><br/>" +
-									"Instances négatives : <b>" + Main.getNegativeInstances(instances, class_value).numInstances() + "</b>");
-			down_panel = new JPanel(new BorderLayout());
-				rules_area = new JEditorPane();
-				scroll_panel_text = new JScrollPane(rules_area);
-				scroll_panel_text.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-				change_class_value = new JButton("Classe =  " + instances.classAttribute().value((int) class_value));
-				new CalculRules(instances, class_value).start();
+		// Création de l'en-tête
+		Vector<String> en_tete = new Vector<>(instances.numAttributes());
+		for(int i=0 ; i<instances.numAttributes() ; i++) {
+			Attribute attribute = instances.attribute(i);
+			en_tete.add(attribute.name());
+		}
+		// Création des valeurs
+		Vector<Vector <String>> rowData = new Vector<>(instances.numInstances());
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			Vector<String> V = new Vector<>();
+			rowData.add(V);
+			for(int j=0 ; j<instances.numAttributes() ; j++) {
+				Attribute attribute = instance.attribute(j);
+				rowData.elementAt(i).add(instance.stringValue(attribute));
+			}
+			
+		}
+		table_instances = new JTable(rowData, en_tete);
+		table_instances.setEnabled(false);
+		table_instances.setAutoCreateRowSorter(true);
+		scroll_panel = new JScrollPane(table_instances);
+		scroll_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		info_area = new JEditorPane();
+		info_area.setContentType("text/html");
+		info_area.setText(	"Instance : <b>" + instances.numInstances() + "</b><br/>" +
+							"Instances positives : <b>" + Main.getPositiveInstances(instances, class_value).numInstances() + "</b><br/>" +
+							"Instances négatives : <b>" + Main.getNegativeInstances(instances, class_value).numInstances() + "</b>");
+		center_panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scroll_panel, info_area);
+		center_panel.setDividerLocation(250);
+		center_panel.setDividerSize(3);
+		
+		down_panel = new JPanel(new BorderLayout());
+			rules_area = new JEditorPane();
+			scroll_panel_text = new JScrollPane(rules_area);
+			scroll_panel_text.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			change_class_value = new JButton("Classe =  " + instances.classAttribute().value((int) class_value));
+			new CalculRules(instances, class_value).start();
 	}
 	
 	private void buildInterface() {
 		file.add(item_load);
 		file.add(item_exit);
+		edit.add(item_edit_value);
 		menu_bar.add(file);
-		
-			center_panel.add(scroll_panel, BorderLayout.CENTER);
-			center_panel.add(info_area, BorderLayout.SOUTH);
+		menu_bar.add(edit);
 			down_panel.add(scroll_panel_text, BorderLayout.CENTER);
 			down_panel.add(change_class_value, BorderLayout.EAST);
 			
-			split_panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, center_panel, down_panel);
-			split_panel.setDividerLocation(350);
-		main_panel.add(split_panel, BorderLayout.CENTER);
+		main_panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, center_panel, down_panel);
+		main_panel.setDividerLocation(350);
+		main_panel.setDividerSize(3);
 		
 		setJMenuBar(menu_bar);
 		setContentPane(main_panel);
@@ -148,6 +142,7 @@ public class Interface extends JFrame implements ActionListener{
 	private void buildEvents() {
 		item_exit.addActionListener(this);
 		item_load.addActionListener(this);
+		item_edit_value.addActionListener(this);
 		
 		change_class_value.addActionListener(this);
 		
@@ -173,23 +168,31 @@ public class Interface extends JFrame implements ActionListener{
 						JOptionPane.showMessageDialog(null, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
+			} else if(MI == item_edit_value) {
+				editClasseValue();
 			}
 		} else if(O.getClass() == JButton.class) {
 			JButton B = (JButton) O;
 			if(B == change_class_value) {
-				int size = instances.classAttribute().numValues();
-				Object[] possibilities = new Object[size];
-				for(int i=0 ; i<size ; i++) {
-					possibilities[i] = instances.classAttribute().value(i);
-				}
-				String s = (String)JOptionPane.showInputDialog(null, "Valeur actuelle : " + instances.classAttribute().value((int) class_value) + "\nChoisir la nouvelle valeur : \n", "AI-FOIL", JOptionPane.PLAIN_MESSAGE, null, possibilities, null);
-				if ((s != null) && (s.length() > 0)) {
-					class_value = Main.getClassValue(instances, s);
-					change_class_value.setText("Classe =  " + instances.classAttribute().value((int) class_value));
-					new CalculRules(instances, class_value).start();
-					return;
-				}
+				editClasseValue();
 			}
+		}
+	}
+	
+	private void editClasseValue() {
+		int size = instances.classAttribute().numValues();
+		Object[] possibilities = new Object[size];
+		for(int i=0 ; i<size ; i++) {
+			possibilities[i] = instances.classAttribute().value(i);
+		}
+		String s = (String)JOptionPane.showInputDialog(null, "Valeur actuelle : " + instances.classAttribute().value((int) class_value) + "\nChoisir la nouvelle valeur : \n", "AI-FOIL", JOptionPane.PLAIN_MESSAGE, null, possibilities, null);
+		if ((s != null) && (s.length() > 0)) {
+			class_value = Main.getClassValue(instances, s);
+			info_area.setText(	"Instance : <b>" + instances.numInstances() + "</b><br/>" +
+					"Instances positives : <b>" + Main.getPositiveInstances(instances, class_value).numInstances() + "</b><br/>" +
+					"Instances négatives : <b>" + Main.getNegativeInstances(instances, class_value).numInstances() + "</b>");
+			change_class_value.setText("Classe =  " + instances.classAttribute().value((int) class_value));
+			new CalculRules(instances, class_value).start();
 		}
 	}
 	
@@ -210,6 +213,7 @@ public class Interface extends JFrame implements ActionListener{
 		public void run() {
 			String ch = "";
 			rules_area.setContentType("text/html");
+			rules_area.setText("");
 			// Calcul des règles et affichage
 			ArrayList<Rule> rules = Main.couvertureSequentielle(instances, value_class);
 			for(Rule R : rules) {
