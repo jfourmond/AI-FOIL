@@ -84,7 +84,6 @@ public class Interface extends JFrame implements ActionListener{
 					Attribute attribute = instances.attribute(i);
 					en_tete.add(attribute.name());
 				}
-				System.out.println(en_tete);
 				// Création des valeurs
 				Vector<Vector <String>> rowData = new Vector<>(instances.numInstances());
 				for(int i=0 ; i<instances.numInstances() ; i++) {
@@ -108,7 +107,6 @@ public class Interface extends JFrame implements ActionListener{
 				info_area.setText(	"Instance : <b>" + instances.numInstances() + "</b><br/>" +
 									"Instances positives : <b>" + Main.getPositiveInstances(instances).numInstances() + "</b><br/>" +
 									"Instances négatives : <b>" + Main.getNegativeInstances(instances).numInstances() + "</b>");
-				
 			down_panel = new JPanel(new BorderLayout());
 				rules_area = new JEditorPane();
 				// rules_area.setLineWrap(true);
@@ -154,7 +152,6 @@ public class Interface extends JFrame implements ActionListener{
 				if (fc.showOpenDialog(null)== 
 				    JFileChooser.APPROVE_OPTION) {
 				    fichier = fc.getSelectedFile();
-				    System.out.println(fichier.getAbsolutePath());
 				    try {
 						new Interface(fichier.getAbsolutePath());
 					} catch (Exception E) {
@@ -166,6 +163,9 @@ public class Interface extends JFrame implements ActionListener{
 		}
 	}
 	
+	/**
+	 * Thread de calcul des règles
+	 */
 	private class CalculRules extends Thread {
 		private Instances instances;
 		

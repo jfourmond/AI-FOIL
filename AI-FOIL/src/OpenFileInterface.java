@@ -94,7 +94,7 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 		openFile.addActionListener(this);
 		exit.addActionListener(this);
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	@Override
@@ -103,7 +103,7 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 		if(O.getClass() == JButton.class) {
 			JButton B = (JButton) O;
 			if(B == exit)
-				dispose();
+				System.exit(EXIT_ON_CLOSE);
 			else if(B == openFile) {
 				File fichier;
 				if (fc.showOpenDialog(null)== 
@@ -120,8 +120,10 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 			}
 		} else if(O.getClass() == JMenuItem.class) {
 			JMenuItem MI = (JMenuItem) O;
-			if(MI == item_exit)
+			if(MI == item_exit) {
 				dispose();
+				System.exit(EXIT_ON_CLOSE);
+			}
 		}
 	}
 }
