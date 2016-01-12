@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 import weka.core.Attribute;
+import weka.core.Instance;
+import weka.core.Instances;
 
 public class Rule {
 	private ArrayList<Literal> literals;
@@ -52,6 +54,43 @@ public class Rule {
 	public boolean addLiterals(Literal L) {
 		if(literals == null) literals = new ArrayList<>();
 		return literals.add(L);
+	}
+	
+	/**
+	 * Retourne les {@link Instances} qui ne satisfont pas la règle
+	 * @param instances : {@link Instances}
+	 * @param literal : {@link Literal}
+	 * @return {@link Instances}
+	 */
+	public Instances removeSatisfyInstances(Instances instances) {
+		Instances data = new Instances(instances, 0);
+		ArrayList<Literal> literals = this.getLiterals();
+		ArrayList<Attribute> attributes = this.getConcernedAttributes();
+		for(int i=0 ;i<instances.numInstances() ; i++) {
+			ArrayList<Literal> instanceLiteral = new ArrayList<>();
+			Instance instance = instances.instance(i);
+			for(int j=0 ; j<instance.numAttributes() ; j++) {
+				Attribute attribute = instance.attribute(j);
+				if(attributes.contains(attribute)) {
+					Literal L = new Literal(attribute, instance.stringValue(attribute));
+					instanceLiteral.add(L);
+				}
+			}
+			if(!compare(literals, instanceLiteral)) data.add(instance);
+		}
+		return data;
+	}
+	
+	/**
+	 * Teste si les {@link ArrayList} de {@link Literal} contiennent les mêmes {@link Literal}
+	 * @param L1 : {@link ArrayList}
+	 * @param L2 : {@link ArrayList}
+	 * @return {@link Boolean}  TRUE si les deux paramètres sont identiques, FALSE sinon
+	 */
+	private boolean compare(ArrayList<Literal> L1, ArrayList<Literal> L2) {
+		for(Literal l : L1)
+			if(!L2.contains(l)) return false;
+		return true;
 	}
 	
 	@Override

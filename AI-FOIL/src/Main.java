@@ -77,31 +77,6 @@ public class Main {
 
 	
 	/**
-	 * Retourne les {@link Instances} qui ne satisfont pas la règle
-	 * @param instances : {@link Instances}
-	 * @param literal : {@link Literal}
-	 * @return {@link Instances}
-	 */
-	public static Instances removeSatisfyInstances(Instances instances, Rule R) {
-		Instances data = new Instances(instances, 0);
-		ArrayList<Literal> literals = R.getLiterals();
-		ArrayList<Attribute> attributes = R.getConcernedAttributes();
-		for(int i=0 ;i<instances.numInstances() ; i++) {
-			ArrayList<Literal> instanceLiteral = new ArrayList<>();
-			Instance instance = instances.instance(i);
-			for(int j=0 ; j<instance.numAttributes() ; j++) {
-				Attribute attribute = instance.attribute(j);
-				if(attributes.contains(attribute)) {
-					Literal L = new Literal(attribute, instance.stringValue(attribute));
-					instanceLiteral.add(L);
-				}
-			}
-			if(!compare(literals, instanceLiteral)) data.add(instance);
-		}
-		return data;
-	}
-	
-	/**
 	 * Teste si les {@link ArrayList} de {@link Literal} contiennent les mêmes {@link Literal}
 	 * @param L1 : {@link ArrayList}
 	 * @param L2 : {@link ArrayList}
@@ -113,6 +88,12 @@ public class Main {
 		return true;
 	}
 	
+	/**
+	 * Retourne la valeur de l' {@link Attribute} class correspondant au {@link String} s
+	 * @param instances : {@link Instances}
+	 * @param s : {@link String}
+	 * @return {@link Double}
+	 */
 	public static double getClassValue(Instances instances, String s) {
 		Attribute attribute = instances.classAttribute();
 		for(int i=0 ; i<attribute.numValues() ; i++) {
@@ -152,7 +133,7 @@ public class Main {
 				PosNewRegle = meilleur.getSatisfyInstances(PosNewRegle);
 			}
 			rules.add(NewRegle);
-			Pos = removeSatisfyInstances(Pos, NewRegle);
+			Pos = NewRegle.removeSatisfyInstances(Pos);
 		}
 		return rules;
 	}
