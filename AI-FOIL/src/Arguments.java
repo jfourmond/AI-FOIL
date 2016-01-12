@@ -5,7 +5,7 @@ public class Arguments {
 	public static String filename;
 	public static boolean nointerface;
 	
-	public boolean help;
+	public static boolean help;
 	
 	public Arguments(String args[]) throws ArgumentException {
 		Map<String, Object> arguments = new Hashtable<>();

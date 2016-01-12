@@ -143,11 +143,27 @@ public class Main {
 		// TODO uniquement filename -> interface graphique sans ouverture de fichier
 		// TODO nointerface + filename -> en ligne de commande
 		
+		if(args.length == 0) {
+			new OpenFileInterface();
+			return;
+		}
+		
+		try {
+			new Arguments(args);
+		} catch (ArgumentException AE) {
+			System.out.println(AE.getArgument() + " isn\'t a valid argument");
+			Arguments.showValidArguments();
+			return;
+		}
+		
+		if(Arguments.help == true) {
+			Arguments.showHelp();
+			return;
+		}
+		
 		BufferedReader reader;
 		try {
-			if(args.length > 0) {
-				filename = args[0];
-			} else throw new Exception("Aucun argument passé en paramètre");
+			filename = Arguments.filename;
 			
 			reader = new BufferedReader(new FileReader(filename));
 			Instances data = new Instances(reader);
