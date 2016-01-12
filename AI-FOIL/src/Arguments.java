@@ -1,5 +1,5 @@
 public class Arguments {
-	public static String filename;
+	public static String filename = "";
 	
 	public static boolean nointerface = false;
 	public static boolean help = false;

@@ -139,10 +139,6 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Dans le cas d'un lancement normal (sans paramètre), lancer l'interface graphique
-		// TODO uniquement filename -> interface graphique sans ouverture de fichier
-		// TODO nointerface + filename -> en ligne de commande
-		
 		if(args.length == 0) {
 			new OpenFileInterface();
 			return;
@@ -163,37 +159,52 @@ public class Main {
 			return;
 		}
 		
-		BufferedReader reader;
-		try {
-			filename = Arguments.filename;
-			
-			reader = new BufferedReader(new FileReader(filename));
-			Instances data = new Instances(reader);
-			// setting class attribute
-			reader.close();
-			data.setClassIndex(data.numAttributes() - 1);
-			
-			// Print header and instances.
-			System.out.println("\nDataset:\n");
-			System.out.println(data);
-			
-			ArrayList<Rule> gen_rules = couvertureSequentielle(data, 0.0);
-			// Parcours des règles générées
-			System.out.println("\n-----\tREGLES GENEREES\t-----");
-			for(Rule R : gen_rules) {
-				System.out.println(R);
+		if(Arguments.nointerface) {
+			if(Arguments.filename.isEmpty()) {
+				Arguments.showValidArguments();
+				return;
+			} else {
+				BufferedReader reader;
+				try {
+					filename = Arguments.filename;
+					
+					reader = new BufferedReader(new FileReader(filename));
+					Instances data = new Instances(reader);
+					// setting class attribute
+					reader.close();
+					data.setClassIndex(data.numAttributes() - 1);
+					
+					// Print header and instances.
+					System.out.println("\nDataset:\n");
+					System.out.println(data);
+					
+					ArrayList<Rule> gen_rules = couvertureSequentielle(data, 0.0);
+					// Parcours des règles générées
+					System.out.println("\n-----\tREGLES GENEREES\t-----");
+					for(Rule R : gen_rules) {
+						System.out.println(R);
+					}
+					System.out.println("\n");
+					
+					PrintConsole.data(data);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					
+				}
 			}
-			System.out.println("\n");
-			
-			PrintConsole.data(data);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			
+		} else {
+			if(!Arguments.filename.isEmpty()) {
+				try {
+					new Interface(Arguments.filename);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
