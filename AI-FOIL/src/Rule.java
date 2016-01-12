@@ -78,10 +78,6 @@ public class Rule {
 			}
 			if(!compare(literals, instanceLiteral)) data.add(instance);
 		}
-		System.out.println("DATA");
-		for(int i=0 ; i<data.numInstances() ;i++) {
-			System.out.println(data.instance(i));
-		}
 		return data;
 	}
 	
@@ -92,10 +88,8 @@ public class Rule {
 	 * @return {@link Boolean}  TRUE si les deux paramètres sont identiques, FALSE sinon
 	 */
 	private boolean compare(ArrayList<Literal> L1, ArrayList<Literal> L2) {
-		System.out.println(L1 + "\n" + L2);
 		for(Literal l : L1)
 			if(!L2.contains(l)) return false;
-		System.out.println("Semblable");
 		return true;
 	}
 	
