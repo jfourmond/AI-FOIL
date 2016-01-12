@@ -57,7 +57,6 @@ public class Interface extends JFrame implements ActionListener{
 		
 		BufferedReader reader = new BufferedReader(new FileReader(this.filename));
 		instances = new Instances(reader);
-		// setting class attribute
 		reader.close();
 		instances.setClassIndex(instances.numAttributes() - 1);
 		
@@ -211,19 +210,23 @@ public class Interface extends JFrame implements ActionListener{
 		
 		@Override
 		public void run() {
-			String ch = "";
-			rules_area.setContentType("text/html");
-			rules_area.setText("<i>Calcul des règles...</i>");
-			// Calcul des règles et affichage
-			ArrayList<Rule> rules = Main.couvertureSequentielle(instances, value_class);
-			for(Rule R : rules) {
-				ch += " <li>" + R.toStringHTML() + "</li>";
+			try {
+				String ch = "";
+				rules_area.setContentType("text/html");
+				rules_area.setText("<i>Calcul des règles...</i>");
+				// Calcul des règles et affichage
+				ArrayList<Rule> rules = Main.couvertureSequentielle(instances, value_class);
+				for(Rule R : rules) {
+					ch += " <li>" + R.toStringHTML() + "</li>";
+				}
+				ch = "Règles : <b>" + rules.size() + "</b>" + ch;
+				rules_area.setText(ch);
+				validate();
+				System.out.println("END compute rules");
+			} catch (Exception E) {
+				System.err.println("ERROR computing rules");
+				rules_area.setText("Erreur lors du calcul de règles");
 			}
-			ch = "Règles : <b>" + rules.size() + "</b>" + ch;
-			rules_area.setText(ch);
-			validate();
-			System.out.println("END compute rules");
-			super.run();
 		}
 	}
 }

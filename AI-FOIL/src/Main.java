@@ -61,14 +61,15 @@ public class Main {
 				literals.add(new Literal(attribute, label));
 			}
 		}
-
+		// On supprime de literals les littéraux qui ont déjà été traités
 		if(alreadyBest.size() != 0) {
 			for(int i=0 ; i<literals.size() ; ) {
-				if(alreadyBest.contains(literals.get(i).getAttribute())) literals.remove(i);
+				if(alreadyBest.contains(literals.get(i).getAttribute())) {
+					literals.remove(i);
+				}
 				else i++;
 			}
 		}
-		
 		Literal bestLiteral = literals.get(0);
 		for(Literal L : literals) {
 			if(L.gain(Pos, Neg) > bestLiteral.gain(Pos, Neg)) bestLiteral = L;
@@ -88,6 +89,20 @@ public class Main {
 		for(Literal l : L1)
 			if(!L2.contains(l)) return false;
 		return true;
+	}
+	
+	/**
+	 * Retourne les {@link Instances} ne manquant pas de valeurs (comme ? par exemple)
+	 * @param instances : {@link Instances}
+	 * @return {@link Instances}
+	 */
+	public static Instances removeUnprecisly(Instances instances) {
+		Instances data = new Instances(instances, 0);
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			if(!instance.hasMissingValue()) data.add(instance);
+		}
+		return data;
 	}
 	
 	/**
@@ -115,8 +130,10 @@ public class Main {
 		Attribute AClass = instances.classAttribute();
 		Literal conclusion = new Literal(AClass, AClass.value((int) value_class));	// Est admis : la valeur de vérité de la classe est la première valeur écrite dans le fichier
 		
-		Instances Pos = getPositiveInstances(instances, value_class);
-		Instances Neg = getNegativeInstances(instances, value_class);
+		Instances data = removeUnprecisly(instances);
+		
+		Instances Pos = getPositiveInstances(data, value_class);
+		Instances Neg = getNegativeInstances(data, value_class);
 		
 		ArrayList<Attribute> bestAttributesUsed = new ArrayList<>();
 		
