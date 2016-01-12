@@ -141,7 +141,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Dans le cas d'un lancement normal (sans paramètre), lancer l'interface graphique
 		// TODO uniquement filename -> interface graphique sans ouverture de fichier
-		// TODO nointerface -> en ligne de commande
+		// TODO nointerface + filename -> en ligne de commande
 		
 		BufferedReader reader;
 		try {
