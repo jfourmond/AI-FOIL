@@ -74,27 +74,7 @@ public class Main {
 		return bestLiteral;
 	}
 	
-	/**
-	 * Retourne les {@link Instances} qui satisfont le {@link Literal}
-	 * @param instances : {@link Instances}
-	 * @param literal : {@link Literal}
-	 * @return {@link Instances}
-	 */
-	public static Instances getSatisfyInstances(Instances instances, Literal literal) {
-		Instances data = new Instances(instances, 0);
-		for(int i=0 ; i<instances.numInstances() ; i++) {
-			Instance instance = instances.instance(i);
-			for(int j=0 ; j<instance.numAttributes() ; j++) {
-				Attribute attribute = instance.attribute(j);
-				if(literal.getAttribute().equals(attribute)) {
-					Literal L = new Literal(attribute,instance.stringValue(attribute));
-					if(L.equals(literal)) data.add(instance);
-					break;
-				}
-			}
-		}
-		return data;
-	}
+
 	
 	/**
 	 * Retourne les {@link Instances} qui ne satisfont pas la règle
@@ -168,8 +148,8 @@ public class Main {
 				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle, meilleurUsed);
 				meilleurUsed.add(meilleur);
 				NewRegle.addLiterals(meilleur);
-				NegNewRegle = getSatisfyInstances(NegNewRegle, meilleur);
-				PosNewRegle = getSatisfyInstances(PosNewRegle, meilleur);
+				NegNewRegle = meilleur.getSatisfyInstances(NegNewRegle);
+				PosNewRegle = meilleur.getSatisfyInstances(PosNewRegle);
 			}
 			rules.add(NewRegle);
 			Pos = removeSatisfyInstances(Pos, NewRegle);

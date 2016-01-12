@@ -57,6 +57,27 @@ public class Literal {
 		return Math.log(x) / Math.log(2);
 	}
 	
+	/**
+	 * Retourne les {@link Instances} qui satisfont le {@link Literal} courant
+	 * @param instances : {@link Instances}
+	 * @return {@link Instances}
+	 */
+	public Instances getSatisfyInstances(Instances instances) {
+		Instances data = new Instances(instances, 0);
+		for(int i=0 ; i<instances.numInstances() ; i++) {
+			Instance instance = instances.instance(i);
+			for(int j=0 ; j<instance.numAttributes() ; j++) {
+				Attribute attribute = instance.attribute(j);
+				if(getAttribute().equals(attribute)) {
+					Literal L = new Literal(attribute,instance.stringValue(attribute));
+					if(L.equals(this)) data.add(instance);
+					break;
+				}
+			}
+		}
+		return data;
+	}
+	
 	@Override
 	public String toString() {
 		return attribute.name() + " = " + label;
