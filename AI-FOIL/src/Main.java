@@ -159,6 +159,7 @@ public class Main {
 			return;
 		}
 		
+		// Si l'argument "nointerface" est saisi
 		if(Arguments.nointerface) {
 			if(Arguments.filename.isEmpty()) {
 				Arguments.showValidArguments();
