@@ -61,10 +61,12 @@ public class Main {
 				literals.add(new Literal(attribute, label));
 			}
 		}
-		
+
 		if(alreadyBest.size() != 0) {
-			for(int i=0 ; i<literals.size() ; i++)
+			for(int i=0 ; i<literals.size() ; ) {
 				if(alreadyBest.contains(literals.get(i).getAttribute())) literals.remove(i);
+				else i++;
+			}
 		}
 		
 		Literal bestLiteral = literals.get(0);
