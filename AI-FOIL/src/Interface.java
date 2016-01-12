@@ -213,14 +213,15 @@ public class Interface extends JFrame implements ActionListener{
 		public void run() {
 			String ch = "";
 			rules_area.setContentType("text/html");
-			rules_area.setText("");
+			rules_area.setText("<i>Calcul des règles...</i>");
 			// Calcul des règles et affichage
 			ArrayList<Rule> rules = Main.couvertureSequentielle(instances, value_class);
 			for(Rule R : rules) {
 				ch += " <li>" + R.toStringHTML() + "</li>";
-				rules_area.setText(ch);
-				validate();
 			}
+			ch = "Règles : <b>" + rules.size() + "</b>" + ch;
+			rules_area.setText(ch);
+			validate();
 			System.out.println("END compute rules");
 			super.run();
 		}
