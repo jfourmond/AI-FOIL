@@ -51,7 +51,7 @@ public class Main {
 	 * @param alreadyBest : {@link ArrayList} permettant de limiter le calcul aux "nouveaux" {@link Literal}
 	 * @return {@link Literal}
 	 */
-	public static Literal getBestLiteral(Instances Pos, Instances Neg, ArrayList<Literal> alreadyBest) {
+	public static Literal getBestLiteral(Instances Pos, Instances Neg, ArrayList<Attribute> alreadyBest) {
 		assert(Pos.equalHeaders(Neg));
 		ArrayList<Literal> literals = new ArrayList<>();
 		for(int i=0 ; i<Pos.numAttributes()-1 ; i++) {
@@ -64,7 +64,7 @@ public class Main {
 		
 		if(alreadyBest.size() != 0) {
 			for(int i=0 ; i<literals.size() ; i++)
-				if(alreadyBest.contains(literals.get(i))) literals.remove(i);
+				if(alreadyBest.contains(literals.get(i).getAttribute())) literals.remove(i);
 		}
 		
 		Literal bestLiteral = literals.get(0);
@@ -116,18 +116,18 @@ public class Main {
 		Instances Pos = getPositiveInstances(instances, value_class);
 		Instances Neg = getNegativeInstances(instances, value_class);
 		
-		ArrayList<Literal> meilleurUsed = new ArrayList<>();
+		ArrayList<Attribute> bestAttributesUsed = new ArrayList<>();
 		
 		while(Pos.numInstances() != 0) {
 			// Apprendre une nouvelle règle
 			Rule NewRegle = new Rule(null, conclusion);	// Règle la plus générale possible
 			Instances NegNewRegle = Neg;
 			Instances PosNewRegle = Pos;
-			meilleurUsed.clear();
+			bestAttributesUsed.clear();
 			while(NegNewRegle.numInstances() != 0) {
 				// Ajouter un nouveau littéral pour spécialiser New Regle
-				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle, meilleurUsed);
-				meilleurUsed.add(meilleur);
+				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle, bestAttributesUsed);
+				bestAttributesUsed.add(meilleur.getAttribute());
 				NewRegle.addLiterals(meilleur);
 				NegNewRegle = meilleur.getSatisfyInstances(NegNewRegle);
 				PosNewRegle = meilleur.getSatisfyInstances(PosNewRegle);
@@ -148,6 +148,7 @@ public class Main {
 			return;
 		}
 		
+		// Si des arguments sont saisis, on les traite
 		try {
 			new Arguments(args);
 		} catch (ArgumentException AE) {
@@ -156,6 +157,7 @@ public class Main {
 			return;
 		}
 		
+		// Si l'argument "help" est saisi, on affiche l'aide
 		if(Arguments.help == true) {
 			Arguments.showHelp();
 			return;
