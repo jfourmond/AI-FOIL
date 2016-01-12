@@ -109,7 +109,6 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 				if (fc.showOpenDialog(null)== 
 					JFileChooser.APPROVE_OPTION) {
 					fichier = fc.getSelectedFile();
-					System.out.println(fichier.getAbsolutePath());
 					try {
 						new Interface(fichier.getAbsolutePath());
 					} catch (Exception E) {
