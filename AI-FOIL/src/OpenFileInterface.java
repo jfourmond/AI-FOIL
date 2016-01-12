@@ -63,10 +63,7 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 				info = new JEditorPane();
 				info.setEditable(false);
 				try {
-					ClassLoader classLoader = getClass().getClassLoader();
-					// File file = new File(classLoader.getResource("file/test.xml").getFile());
-					
-					info.setPage(new File(classLoader.getResource(info_path).getFile()).toURI().toURL());
+					info.setPage(new File(info_path).toURI().toURL());
 				} catch (IOException e) {
 					System.err.println(e.getMessage());
 				}
