@@ -118,7 +118,12 @@ public class Rule {
 	
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+		try {
+			Rule R = (Rule) obj;
+			if(R.literals.equals(literals) && R.conclusion.equals(conclusion)) return true;
+			else return false;
+		} catch (ClassCastException E) {
+			return false;
+		}
 	}
 }
