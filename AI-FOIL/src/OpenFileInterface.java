@@ -22,6 +22,7 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 	
 	private static String app_name = "AI-FOIL";
 	
+	// TODO corriger le chemin pour qu'il ne puisse pas changer et soit absolu
 	private String info_path = "./info.html";
 	
 	private JMenuBar menu_bar;
