@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import weka.core.Instance;
 import weka.core.Instances;
@@ -15,11 +16,11 @@ public class MainTest {
 	 * @param instances : {@link Instances}
 	 * @return {@link Instances}
 	 */
-	public static Instances getPositiveInstances(Instances instances) {
+	public static Instances getPositiveInstances(Instances instances, double value_class) {
 		Instances pos = new Instances(instances, 0);
 		for(int i=0 ; i<instances.numInstances() ; i++) {
 			Instance instance = instances.instance(i);
-			if(instance.classValue() == 0.0)
+			if(instance.classValue() == value_class)
 				pos.add(instance);
 		}
 		return pos;
@@ -30,11 +31,11 @@ public class MainTest {
 	 * @param instances : {@link Instances}
 	 * @return {@link Instances}
 	 */
-	public static Instances getNegativeInstances(Instances instances) {
+	public static Instances getNegativeInstances(Instances instances, double value_class) {
 		Instances neg = new Instances(instances, 0);
 		for(int i=0 ; i<instances.numInstances() ; i++) {
 			Instance instance = instances.instance(i);
-			if(instance.classValue() == 1.0)
+			if(instance.classValue() != value_class)
 				neg.add(instance);
 		}
 		return neg;
@@ -61,7 +62,7 @@ public class MainTest {
 				System.out.println("\t" + instance.classValue());
 			}
 			
-			Instances Pos = getPositiveInstances(data);
+			Instances Pos = getPositiveInstances(data, 0);
 			// Parcours des Instances Positives
 			System.out.println("\n-----\tINSTANCES POSITIVES\t-----");
 			for(int i=0 ; i<Pos.numInstances() ; i++) {
@@ -70,13 +71,18 @@ public class MainTest {
 				System.out.println("\t" + instance.classValue());
 			}
 			
-			Instances Neg = getNegativeInstances(data);
+			Instances Neg = getNegativeInstances(data, 0);
 			// Parcours des Instances Negatives
 			System.out.println("-----\tINSTANCES NEGATIVES\t-----");
 			for(int i=0 ; i<Neg.numInstances() ; i++) {
 				Instance instance = Neg.instance(i);
 				System.out.print("Instance " + i + " : " + instance);
 				System.out.println("\t" + instance.classValue());
+			}
+			
+			ArrayList<Rule> rules = Main.couvertureSequentielle(data, 2);
+			for(Rule R : rules) {
+				System.out.println(R);
 			}
 			
 			new OpenFileInterface();

@@ -10,10 +10,9 @@ import weka.core.Instances;
 
 public class Main {
 
-	static String filename; // = "/home/etudiant/Outils/weka-3-6-13/data/weather.nominal.arff";
+	static String filename;
 	
 	// TODO laisser le choix à l'utilisateur de choisir l'attribut de la classe à calculer
-	// TODO -> Ajouter un paramètre double (caractérisant la valeur de la classe) à getPositiveInstances et getNegativeInstances
 	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
@@ -49,9 +48,10 @@ public class Main {
 	 * Retourne le {@link Literal} ayant le gain le plus élevé
 	 * @param Pos : {@link Instances}
 	 * @param Neg : {@link Instances}
+	 * @param alreadyBest : {@link ArrayList} permettant de limiter le calcul aux "nouveaux" {@link Literal}
 	 * @return {@link Literal}
 	 */
-	public static Literal getBestLiteral(Instances Pos, Instances Neg) {
+	public static Literal getBestLiteral(Instances Pos, Instances Neg, ArrayList<Literal> alreadyBest) {
 		assert(Pos.equalHeaders(Neg));
 		ArrayList<Literal> literals = new ArrayList<>();
 		for(int i=0 ; i<Pos.numAttributes()-1 ; i++) {
@@ -60,6 +60,11 @@ public class Main {
 				String label = attribute.value(j);
 				literals.add(new Literal(attribute, label));
 			}
+		}
+		
+		if(alreadyBest.size() != 0) {
+			for(int i=0 ; i<literals.size() ; i++)
+				if(alreadyBest.contains(literals.get(i))) literals.remove(i);
 		}
 		
 		Literal bestLiteral = literals.get(0);
@@ -134,7 +139,7 @@ public class Main {
 			String value = attribute.value(i);
 			if(value.equals(s)) return (double) i;
 		}
-		return (Double) null;
+		return Double.NaN;
 	}
 	
 	/**
@@ -150,14 +155,18 @@ public class Main {
 		Instances Pos = getPositiveInstances(instances, value_class);
 		Instances Neg = getNegativeInstances(instances, value_class);
 		
+		ArrayList<Literal> meilleurUsed = new ArrayList<>();
+		
 		while(Pos.numInstances() != 0) {
 			// Apprendre une nouvelle règle
 			Rule NewRegle = new Rule(null, conclusion);	// Règle la plus générale possible
 			Instances NegNewRegle = Neg;
 			Instances PosNewRegle = Pos;
+			meilleurUsed.clear();
 			while(NegNewRegle.numInstances() != 0) {
 				// Ajouter un nouveau littéral pour spécialiser New Regle
-				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle);
+				Literal meilleur = getBestLiteral(PosNewRegle, NegNewRegle, meilleurUsed);
+				meilleurUsed.add(meilleur);
 				NewRegle.addLiterals(meilleur);
 				NegNewRegle = getSatisfyInstances(NegNewRegle, meilleur);
 				PosNewRegle = getSatisfyInstances(PosNewRegle, meilleur);
