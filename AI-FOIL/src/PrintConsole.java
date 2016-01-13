@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -13,6 +16,8 @@ public class PrintConsole {
 	public static final String ANSI_PURPLE = "\u001B[35m";
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
+	
+	private static Scanner sc;
 	
 	public static void data(Instances instances) {
 		// Affichage des headers
@@ -56,5 +61,24 @@ public class PrintConsole {
 			}
 			System.out.println();
 		}
+	}
+	
+	public static double askClassValue(Instances instances) {
+		Attribute classAttribute = instances.classAttribute();
+		ArrayList<String> classValues = new ArrayList<>();
+		for(int i=0 ; i<classAttribute.numValues() ; i++)
+			classValues.add(classAttribute.value(i));
+		
+		sc = new Scanner(System.in);
+		System.out.print("Pour quelle valeurs de la classe voulez-vous calculer les règles ? ");
+		
+		for(int i=0 ; i<classValues.size() ; i++) {
+			if(i != classValues.size() -1) System.out.print(classValues.get(i) + " / ");
+			else System.out.println(classValues.get(i));
+		}
+		
+		String s = sc.nextLine();
+		
+		return classValues.indexOf(s);
 	}
 }

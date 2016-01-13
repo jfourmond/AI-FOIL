@@ -18,6 +18,6 @@ public class ArffFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return "arff File";
+		return ".arff File";
 	}
 }

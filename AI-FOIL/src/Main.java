@@ -158,6 +158,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
+		
 		if(args.length == 0) {
 			new OpenFileInterface();
 			return;
@@ -207,6 +208,17 @@ public class Main {
 					System.out.println("\n");
 					
 					PrintConsole.data(data);
+					
+					double value = -1.0;
+					while(value == -1.0) {
+						value = PrintConsole.askClassValue(data);
+					}
+					
+					ArrayList<Rule> rules = couvertureSequentielle(data, value);
+					System.out.println("Règles : " + rules.size());
+					for(Rule R : rules) {
+						System.out.println(R);
+					}
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
