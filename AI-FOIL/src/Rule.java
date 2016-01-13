@@ -4,6 +4,9 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * Classe utilisée pour représenter une règle
+ */
 public class Rule {
 	private ArrayList<Literal> literals;
 	private Literal conclusion;

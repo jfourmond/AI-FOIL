@@ -1,5 +1,5 @@
 /**
- * {@link ArgumentException} permet de gérer les arguments des exceptions non valides
+ * Classe utilisée pour gérer les exceptions des arguments non valides
  */
 public class ArgumentException extends Exception {
 	private static final long serialVersionUID = 1L;

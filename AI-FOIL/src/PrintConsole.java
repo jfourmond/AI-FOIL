@@ -5,17 +5,10 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * Classe utilisée pour gérer l'affiche console
+ */
 public class PrintConsole {
-
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
 	
 	private static Scanner sc;
 	
@@ -61,6 +54,7 @@ public class PrintConsole {
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 	
 	public static double askClassValue(Instances instances) {
@@ -70,14 +64,13 @@ public class PrintConsole {
 			classValues.add(classAttribute.value(i));
 		
 		sc = new Scanner(System.in);
-		System.out.print("Pour quelle valeurs de la classe voulez-vous calculer les règles ? ");
-		
+		System.out.print("Pour quelle valeurs de la classe voulez-vous calculer les règles ? ( ");
 		for(int i=0 ; i<classValues.size() ; i++) {
 			if(i != classValues.size() -1) System.out.print(classValues.get(i) + " / ");
-			else System.out.println(classValues.get(i));
+			else System.out.print(classValues.get(i) + " )\t");
 		}
-		
 		String s = sc.nextLine();
+		System.out.println();
 		
 		return classValues.indexOf(s);
 	}

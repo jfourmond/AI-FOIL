@@ -16,6 +16,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+/**
+ * Classe utilisée pour l'affichage de la fenêtre d'accueil au lancement du programme
+ */
 public class OpenFileInterface extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;

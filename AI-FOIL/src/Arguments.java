@@ -1,3 +1,6 @@
+/**
+ * Classe utilisée pour gerer les arguments passés au programme
+ */
 public class Arguments {
 	public static String filename = "";
 	
