@@ -16,18 +16,38 @@ public class PrintConsole {
 	
 	public static void data(Instances instances) {
 		// Affichage des headers
-		System.out.print("E\t| ");
+		System.out.print("E\t|    ");
 		for(int i=0 ; i<instances.numAttributes() ; i++) {
 			Attribute attribute = instances.attribute(i);
-			System.out.print(attribute.name() + "\t|\t");
+			System.out.print(attribute.name() + "    |    ");
 		}
 		System.out.println();
 		for(int i=0 ; i<instances.numInstances() ; i++) {
 			Instance instance = instances.instance(i);
-			System.out.print(i + "\t| ");
+			System.out.print(i + "\t|");
 			for(int j=0 ; j<instances.numAttributes() ; j++) {
 				Attribute attribute = instance.attribute(j);
-				System.out.print(instance.stringValue(attribute) + "\t\t|");
+				int diff_longueur = instance.stringValue(attribute).length()-attribute.name().length();
+				switch (diff_longueur) {
+					case -10: System.out.print("         "+instance.stringValue(attribute)+"         |"); break;
+					case -9 : System.out.print("        "+instance.stringValue(attribute)+"         |"); break;
+					case -8 : System.out.print("        "+instance.stringValue(attribute)+"        |"); break;
+					case -7 : System.out.print("       "+instance.stringValue(attribute)+"        |"); break;
+					case -6 : System.out.print("       "+instance.stringValue(attribute)+"       |"); break;
+					case -5 : System.out.print("      "+instance.stringValue(attribute)+"       |"); break;
+					case -4 : System.out.print("      "+instance.stringValue(attribute)+"      |"); break;
+					case -3 : System.out.print("     "+instance.stringValue(attribute)+"      |"); break;
+					case -2 : System.out.print("     "+instance.stringValue(attribute)+"     |"); break;
+					case -1 : System.out.print("    "+instance.stringValue(attribute)+"     |"); break;
+					case 0  : System.out.print("    "+instance.stringValue(attribute)+"    |"); break;
+					case 1  : System.out.print("    "+instance.stringValue(attribute)+"   |"); break;
+					case 2  : System.out.print("   "+instance.stringValue(attribute)+"   |"); break;
+					case 3  : System.out.print("   "+instance.stringValue(attribute)+"  |"); break;
+					case 4  : System.out.print("  "+instance.stringValue(attribute)+"  |"); break;
+					case 5  : System.out.print("  "+instance.stringValue(attribute)+" |"); break;
+					case 6  : System.out.print(" "+instance.stringValue(attribute)+" |"); break;
+					default : System.out.print(" "+instance.stringValue(attribute).substring(0, 5+attribute.name().length())+" |"); break;
+				}
 			}
 			System.out.println();
 		}
