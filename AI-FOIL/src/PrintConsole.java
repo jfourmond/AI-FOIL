@@ -29,6 +29,11 @@ public class PrintConsole {
 				Attribute attribute = instance.attribute(j);
 				int diff_longueur = instance.stringValue(attribute).length()-attribute.name().length();
 				switch (diff_longueur) {
+					case -15: System.out.print("           "+instance.stringValue(attribute)+"            |"); break;
+					case -14: System.out.print("           "+instance.stringValue(attribute)+"           |"); break;
+					case -13: System.out.print("          "+instance.stringValue(attribute)+"           |"); break;
+					case -12: System.out.print("          "+instance.stringValue(attribute)+"          |"); break;
+					case -11: System.out.print("         "+instance.stringValue(attribute)+"          |"); break;
 					case -10: System.out.print("         "+instance.stringValue(attribute)+"         |"); break;
 					case -9 : System.out.print("        "+instance.stringValue(attribute)+"         |"); break;
 					case -8 : System.out.print("        "+instance.stringValue(attribute)+"        |"); break;
