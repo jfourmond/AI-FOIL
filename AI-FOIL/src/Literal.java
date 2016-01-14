@@ -2,6 +2,9 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * Classe utilisée pour représenter un littéral
+ */
 public class Literal {
 	private Attribute attribute;
 	private String label;

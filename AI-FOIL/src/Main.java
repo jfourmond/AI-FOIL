@@ -8,6 +8,10 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * Classe utilisée dans le lancement du programme et contenant les algorithmes et les méthodes
+ * principales du programme
+ */
 public class Main {
 
 	static String filename;
@@ -158,6 +162,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
+		
 		if(args.length == 0) {
 			new OpenFileInterface();
 			return;
@@ -194,19 +199,18 @@ public class Main {
 					reader.close();
 					data.setClassIndex(data.numAttributes() - 1);
 					
-					// Print header and instances.
-					System.out.println("\nDataset:\n");
-					System.out.println(data);
+					PrintConsole.data(data);
 					
-					ArrayList<Rule> gen_rules = couvertureSequentielle(data, 0.0);
-					// Parcours des règles générées
-					System.out.println("\n-----\tREGLES GENEREES\t-----");
-					for(Rule R : gen_rules) {
+					double value = -1.0;
+					while(value == -1.0) {
+						value = PrintConsole.askClassValue(data);
+					}
+					
+					ArrayList<Rule> rules = couvertureSequentielle(data, value);
+					System.out.println("Règles : " + rules.size());
+					for(Rule R : rules) {
 						System.out.println(R);
 					}
-					System.out.println("\n");
-					
-					PrintConsole.data(data);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {

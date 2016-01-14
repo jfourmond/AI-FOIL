@@ -24,6 +24,9 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
+/**
+ * Classe utilisée pour construire et afficher l'interface graphique principale
+ */
 public class Interface extends JFrame implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;

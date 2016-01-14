@@ -2,6 +2,10 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * Classe utilisée pour filtrer les fichiers lors de l'ouverture
+ * de la fenêtre de dialogue dans le but de choisir un fichier arff
+ */
 public class ArffFileFilter extends FileFilter {
 
 	@Override
@@ -18,6 +22,6 @@ public class ArffFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return "arff File";
+		return ".arff File";
 	}
 }
