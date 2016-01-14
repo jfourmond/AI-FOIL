@@ -4,7 +4,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -24,8 +23,6 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private static String app_name = "AI-FOIL";
-	
-	private String info_path = "resources/info.html";
 	
 	private JMenuBar menu_bar;
 	private JMenu file;
@@ -65,11 +62,8 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 			west_panel = new JPanel();
 				info = new JEditorPane();
 				info.setEditable(false);
-				try {
-					info.setPage(new File(info_path).toURI().toURL());
-				} catch (IOException e) {
-					System.err.println(e.getMessage());
-				}
+				info.setContentType("text/html");
+				info.setText(getInfo());
 			east_panel = new JPanel(new GridLayout(0, 1));
 				openFile = new JButton("Ouvrir");
 				openFile.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -127,5 +121,23 @@ public class OpenFileInterface extends JFrame implements ActionListener {
 				System.exit(EXIT_ON_CLOSE);
 			}
 		}
+	}
+	
+	private String getInfo() {
+		String ch = "<html>";
+		ch += "<h1>AI-FOIL</h1>";
+		
+		ch += "<p>Application produite par<br/>";
+		ch += "<center><b>DEFAYE Johan</b><br/>";
+		ch += "<b>FOURMOND Jérôme</b></center>";
+		ch += "en <b>Master 1 - Informatique</b><br/>";
+		ch += "dans le cadre de l'Unité d'Enseignement<br/>";
+		ch += "<center><i>Modèles des graphes et de l\'intelligence artificielle</i><br/></center>";
+		ch += "dirigée par<br/>";
+		ch += "<center><b>DUVAL, Béatrice</b></center>";
+		ch += "</p>";
+		ch += "</html>";
+		
+		return ch;
 	}
 }
