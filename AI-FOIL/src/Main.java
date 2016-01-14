@@ -16,11 +16,11 @@ public class Main {
 
 	static String filename;
 	
-	// TODO laisser le choix à l'utilisateur de choisir l'attribut de la classe à calculer
-	
 	/**
 	 * Retourne les {@link Instances} positives des {@link Instances} passées en paramètre
+	 * en fonction de la valeur de la classe
 	 * @param instances : {@link Instances}
+	 * @param value_class : double
 	 * @return {@link Instances}
 	 */
 	public static Instances getPositiveInstances(Instances instances, double value_class) {
@@ -35,7 +35,9 @@ public class Main {
 	
 	/**
 	 * Retourne les {@link Instances} négatives des {@link Instances} passées en paramètre
+	 * en fonction de la valeur de la classe
 	 * @param instances : {@link Instances}
+	 * @param value_class : double
 	 * @return {@link Instances}
 	 */
 	public static Instances getNegativeInstances(Instances instances, double value_class) {
@@ -125,8 +127,10 @@ public class Main {
 	}
 	
 	/**
-	 * Génère des règles à partir des {@link Instances} passées en paramètre
+	 * Génère des règles à partir des {@link Instances} passées en paramètre,
+	 * la valeur de classe passée en paramètre est la valeur sur laquelle traitée les règles
 	 * @param instances : {@link Instances}
+	 * @param value_class : double
 	 * @return {@link ArrayList}
 	 */
 	public static ArrayList<Rule> couvertureSequentielle(Instances instances, double value_class) {

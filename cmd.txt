@@ -1,5 +1,0 @@
-#Compilation
-javac -cp ./libraries/weka.jar ./src/*.java -d ./bin/
-
-# Exécution
-java -cp .:bin/:libraries/weka.jar Main  [arguments]
