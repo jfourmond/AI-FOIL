@@ -17,61 +17,45 @@ public class PrintConsole {
 			System.out.print(" ");
 		}
 	}
-	
+	/**
+	 * Affiche un tableau dans la console contenant toutes les instances
+	 * @param instances :{@link Instances}
+	 */
 	public static void data(Instances instances) {
 		// Affichage des headers
 		System.out.print("E\t|    ");
 		int size_row = 10;
+		//Affichage de la première ligne contenant les noms des attributs
 		for(int i=0 ; i<instances.numAttributes() ; i++) {
 			Attribute attribute = instances.attribute(i);
-			System.out/*switch (diff_longueur) {
-			case -15: System.out.print("           "+instance.stringValue(attribute)+"            |"); break;
-			case -14: System.out.print("           "+instance.stringValue(attribute)+"           |"); break;
-			case -13: System.out.print("          "+instance.stringValue(attribute)+"           |"); break;
-			case -12: System.out.print("          "+instance.stringValue(attribute)+"          |"); break;
-			case -11: System.out.print("         "+instance.stringValue(attribute)+"          |"); break;
-			case -10: System.out.print("         "+instance.stringValue(attribute)+"         |"); break;
-			case -9 : System.out.print("        "+instance.stringValue(attribute)+"         |"); break;
-			case -8 : System.out.print("        "+instance.stringValue(attribute)+"        |"); break;
-			case -7 : System.out.print("       "+instance.stringValue(attribute)+"        |"); break;
-			case -6 : System.out.print("       "+instance.stringValue(attribute)+"       |"); break;
-			case -5 : System.out.print("      "+instance.stringValue(attribute)+"       |"); break;
-			case -4 : System.out.print("      "+instance.stringValue(attribute)+"      |"); break;
-			case -3 : System.out.print("     "+instance.stringValue(attribute)+"      |"); break;
-			case -2 : System.out.print("     "+instance.stringValue(attribute)+"     |"); break;
-			case -1 : System.out.print("    "+instance.stringValue(attribute)+"     |"); break;
-			case 0  : System.out.print("    "+instance.stringValue(attribute)+"    |"); break;
-			case 1  : System.out.print("    "+instance.stringValue(attribute)+"   |"); break;
-			case 2  : System.out.print("   "+instance.stringValue(attribute)+"   |"); break;
-			case 3  : System.out.print("   "+instance.stringValue(attribute)+"  |"); break;
-			case 4  : System.out.print("  "+instance.stringValue(attribute)+"  |"); break;
-			case 5  : System.out.print("  "+instance.stringValue(attribute)+" |"); break;
-			case 6  : System.out.print(" "+instance.stringValue(attribute)+" |"); break;
-			default : System.out.print(" "+instance.stringValue(attribute).substring(0, 5+attribute.name().length())+" |"); break;
-		}	*/			.print(attribute.name() + "    |    ");
+			System.out.print(attribute.name() + "    |    ");
 			size_row += 9 + attribute.name().length();
 		}
 		System.out.println();
 		for (int i = 0; i < size_row/2; ++i) System.out.print("- ");
 		System.out.println();
-		for(int i=0 ; i<instances.numInstances() ; i++) {
+		//Affichage du reste du tableau contenant toutes les instances
+		for (int i = 0; i < instances.numInstances(); ++i) {
 			Instance instance = instances.instance(i);
 			System.out.print(i + "\t|");
-			for(int j=0 ; j<instances.numAttributes() ; j++) {
+			for (int j = 0; j < instances.numAttributes(); ++j) {
 				Attribute attribute = instance.attribute(j);
 				int diff_longueur = instance.stringValue(attribute).length()-attribute.name().length();
-					if ((8-diff_longueur) % 2 == 0) {
+					
+				if ((8-diff_longueur) < 2) 
+					System.out.print(" " + instance.stringValue(attribute).substring(0, 6+attribute.name().length()) + " |");
+				else if ((8-diff_longueur) % 2 == 0) {
 						print_space((8-diff_longueur)/2);
 						System.out.print(instance.stringValue(attribute));
 						print_space((8-diff_longueur)/2);
 						System.out.print("|");
-					}
-					else {
+				}
+				else if ((8-diff_longueur) % 2 != 0){
 						print_space(1+((8-diff_longueur)/2));
 						System.out.print(instance.stringValue(attribute));
 						print_space((8-diff_longueur)/2);
 						System.out.print("|");
-					}
+				} 	
 			}
 			System.out.println();
 		}
