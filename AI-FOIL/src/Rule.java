@@ -62,7 +62,6 @@ public class Rule {
 	/**
 	 * Retourne les {@link Instances} qui satisfont la règle
 	 * @param instances : {@link Instances}
-	 * @param literal : {@link Literal}
 	 * @return {@link Instances}
 	 */
 	public Instances removeSatisfyInstances(Instances instances) {
