@@ -1,0 +1,20 @@
+#!/bin/sh
+
+PATHSCRIPT="${0%/*}"
+echo $PATHSCRIPT
+
+if [ -e AI-FOIL.jar ]
+then
+	# Droit d'exécution
+	chmod u+x AI-FOIL.jar
+else
+	echo "JAR AI-FOIL introuvable"
+fi
+
+if [ -e ai-foil-jar ]
+then
+	# Droit d'exécution
+	chmod u+x ai-foil-jar
+else
+	echo "Script ai-foil_jar introuvable"
+fi

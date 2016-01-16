@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Execution du jar
+
+PATHSCRIPT="${0%/*}"
+echo $PATHSCRIPT
+
+java -jar $PATHSCRIPT/AI-FOIL.jar $*

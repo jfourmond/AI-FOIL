@@ -203,6 +203,10 @@ public class Main {
 					reader.close();
 					data.setClassIndex(data.numAttributes() - 1);
 					
+					if(!Arguments.fileOut.isEmpty()) {
+						new PrintFile(data, Arguments.fileOut).start();
+					}
+					
 					PrintConsole.data(data);
 					
 					double value = -1.0;
