@@ -34,6 +34,7 @@ Les fichiers se manipulent de la façon suivante :
 		-> compile le contenu du répertoire "src" à l'aide de la librairie
 				weka situé dans le répertoire "libraries"
 		-> crée les fichiers de compilation dans bin
+		-> génère la javadoc
 		-> attribue les droits au script ai-foil
 		
 	----------	EXECUTION	----------
