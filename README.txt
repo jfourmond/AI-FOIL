@@ -77,4 +77,8 @@ scripts d'exécution par exemple).
 			le fichier dans l'interface graphique
 		-> peut être précédé de l'argument "-nointerface 
 	- "-nointerface"	: associé au chemin du fichier, le programme
-			s'exécute dans la console uniquement.	
+			s'exécute dans la console uniquement.
+		-> peut être précédé de l'argument "-out=..."
+	- "-out=[ path-to-file ]" : chemin vers le fichier qui sera rempli
+			avec le tableau d'instance du fichier et les règles de chaque
+			attribut de la classe
