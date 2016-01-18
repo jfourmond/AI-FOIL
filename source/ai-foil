@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Exécution 
+
+PATHSCRIPT="${0%/*}"
+echo $PATHSCRIPT
+
+java -cp .:$PATHSCRIPT/bin/:$PATHSCRIPT/libraries/weka.jar Main $*

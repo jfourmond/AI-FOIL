@@ -1,0 +1,19 @@
+#!/bin/sh
+
+PATHSCRIPT="${0%/*}"
+echo $PATHSCRIPT
+
+# Création du répertoire bin
+if [ ! -e bin ] 
+then
+	mkdir $PATHSCRIPT/bin
+fi
+
+# Compilation
+javac -cp $PATHSCRIPT/libraries/weka.jar $PATHSCRIPT/src/*.java -d $PATHSCRIPT/bin/
+
+# Javadoc
+javadoc $PATHSCRIPT/src/* -d $PATHSCRIPT/doc -package-list $PATHSCRIPT/libraries/weka.jar
+
+# Droit d'exécution
+chmod u+x $PATHSCRIPT/ai-foil
